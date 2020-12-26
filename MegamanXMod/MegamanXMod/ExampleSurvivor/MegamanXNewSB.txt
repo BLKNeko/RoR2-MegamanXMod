@@ -1,6 +1,7 @@
 Event	ID	Name			Wwise Object Path	Notes
 	275935669	CallGreenSpinner			\Default Work Unit\CallGreenSpinner	
 	295992216	CallXHurt			\Default Work Unit\CallXHurt	
+	680341707	CallSqueezeBomb			\Default Work Unit\CallSqueezeBomb	
 	715378657	CallXFootstep			\Default Work Unit\CallXFootstep	
 	1515398611	CallXBullet			\Default Work Unit\CallXBullet	
 	1654784168	CallCharging			\Default Work Unit\CallCharging	
@@ -8,6 +9,7 @@ Event	ID	Name			Wwise Object Path	Notes
 	2781754030	CallFullCharged			\Default Work Unit\CallFullCharged	
 	3103806487	CallXFullPower			\Default Work Unit\CallXFullPower	
 	3191291850	CallShotgunIce			\Default Work Unit\CallShotgunIce	
+	3526369107	CallMeltCreeper			\Default Work Unit\CallMeltCreeper	
 	4097207099	CallXChargeShot			\Default Work Unit\CallXChargeShot	
 	4145541447	CallXDash			\Default Work Unit\CallXDash	
 
@@ -19,8 +21,10 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	280341000	ShotgunIce	C:\Users\augus\OneDrive\Documentos\WwiseProjects\MegamanXNewSB\.cache\Windows\SFX\ShotgunIce_A1793BE9.wem		\Actor-Mixer Hierarchy\Default Work Unit\MasterMixer\SFXMixer\SFXs\ShotgunIce		5256
 	398446175	XDash	C:\Users\augus\OneDrive\Documentos\WwiseProjects\MegamanXNewSB\.cache\Windows\SFX\XDash_A1793BE9.wem		\Actor-Mixer Hierarchy\Default Work Unit\MasterMixer\SFXMixer\SFXs\XDash		3843
 	403230918	XHurt	C:\Users\augus\OneDrive\Documentos\WwiseProjects\MegamanXNewSB\.cache\Windows\SFX\XHurt_A1793BE9.wem		\Actor-Mixer Hierarchy\Default Work Unit\MasterMixer\SFXMixer\SFXs\XHurt		13654
+	434794038	MeltCreeper	C:\Users\augus\OneDrive\Documentos\WwiseProjects\MegamanXNewSB\.cache\Windows\SFX\MeltCreeper_A1793BE9.wem		\Actor-Mixer Hierarchy\Default Work Unit\MasterMixer\SFXMixer\SFXs\MeltCreeper		15532
 	487389787	XChargeShot	C:\Users\augus\OneDrive\Documentos\WwiseProjects\MegamanXNewSB\.cache\Windows\SFX\XChargeShot_A1793BE9.wem		\Actor-Mixer Hierarchy\Default Work Unit\MasterMixer\SFXMixer\SFXs\XChargeShot		5706
 	542250216	XFootstep	C:\Users\augus\OneDrive\Documentos\WwiseProjects\MegamanXNewSB\.cache\Windows\SFX\XFootstep_A1793BE9.wem		\Actor-Mixer Hierarchy\Default Work Unit\MasterMixer\SFXMixer\SFXs\XFootstep		3183
+	587484628	SqueezeBomb	C:\Users\augus\OneDrive\Documentos\WwiseProjects\MegamanXNewSB\.cache\Windows\SFX\SqueezeBomb_A1793BE9.wem		\Actor-Mixer Hierarchy\Default Work Unit\MasterMixer\SFXMixer\SFXs\SqueezeBomb		14596
 	641783897	XFullPower	C:\Users\augus\OneDrive\Documentos\WwiseProjects\MegamanXNewSB\.cache\Windows\SFX\XFullPower_A1793BE9.wem		\Actor-Mixer Hierarchy\Default Work Unit\MasterMixer\SFXMixer\SFXs\XFullPower		19041
 	662053606	FullCharged	C:\Users\augus\OneDrive\Documentos\WwiseProjects\MegamanXNewSB\.cache\Windows\SFX\FullCharged_A1793BE9.wem		\Actor-Mixer Hierarchy\Default Work Unit\MasterMixer\SFXMixer\SFXs\FullCharged		5814
 	716982467	Charging	C:\Users\augus\OneDrive\Documentos\WwiseProjects\MegamanXNewSB\.cache\Windows\SFX\Charging_A1793BE9.wem		\Actor-Mixer Hierarchy\Default Work Unit\MasterMixer\SFXMixer\SFXs\Charging		16214

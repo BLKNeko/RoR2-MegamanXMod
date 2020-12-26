@@ -1,17 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="examplesurvivorbundle" />
     <None Remove="MegamanXBundle" />
     <None Remove="MegamanXNewSB.bnk" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="examplesurvivorbundle" />
     <EmbeddedResource Include="MegamanXBundle" />
     <EmbeddedResource Include="MegamanXNewSB.bnk" />
   </ItemGroup>
