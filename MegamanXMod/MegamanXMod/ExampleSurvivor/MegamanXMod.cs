@@ -22,12 +22,12 @@ using System.Runtime.CompilerServices;
 
 
 
-namespace ExampleSurvivor
+namespace MegamanX
 {
 
     [BepInDependency("com.bepis.r2api")]
 
-    [BepInPlugin(MODUID, "MegamanXMod", "1.1.4")] // put your own name and version here
+    [BepInPlugin(MODUID, "MegamanXMod", "1.4.5")] // put your own name and version here
     [R2APISubmoduleDependency(nameof(PrefabAPI), nameof(SurvivorAPI), nameof(LoadoutAPI), nameof(ItemAPI), nameof(DifficultyAPI), nameof(BuffAPI))] // need these dependencies for the mod to work properly
 
 
@@ -39,7 +39,7 @@ namespace ExampleSurvivor
         public GameObject characterDisplay; // the prefab used for character select
         public GameObject doppelganger; // umbra shit
 
-        public static GameObject arrowProjectile; // prefab for our survivor's primary attack projectile
+        public static GameObject XShot; // prefab for our survivor's primary attack projectile
         public static GameObject iceBombProjectile; // prefab for our survivor's FMJ secondary attack projectile
         public static GameObject chargeProjectile; // prefab for chargeshot
         public static GameObject greenNProjectile; // prefab for chargeshot
@@ -82,7 +82,7 @@ namespace ExampleSurvivor
         internal static void CreatePrefab()
         {
             // first clone the commando prefab so we can turn that into our own survivor
-            characterPrefab = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody"), "ExampleSurvivorBody", true, "C:\\Users\\test\\Documents\\ror2mods\\ExampleSurvivor\\ExampleSurvivor\\ExampleSurvivor\\ExampleSurvivor.cs", "CreatePrefab", 151);
+            characterPrefab = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody"), "XBody", true, "C:\\Users\\test\\Documents\\ror2mods\\MegamanX\\MegamanX\\MegamanX\\MegamanX.cs", "CreatePrefab", 151);
 
             characterPrefab.GetComponent<NetworkIdentity>().localPlayerAuthority = true;
 
@@ -125,25 +125,25 @@ namespace ExampleSurvivor
             // set up the character body here
             CharacterBody bodyComponent = characterPrefab.GetComponent<CharacterBody>();
             bodyComponent.bodyIndex = -1;
-            bodyComponent.baseNameToken = "EXAMPLESURVIVOR_NAME"; // name token
-            bodyComponent.subtitleNameToken = "EXAMPLESURVIVOR_SUBTITLE"; // subtitle token- used for umbras
+            bodyComponent.baseNameToken = "X_NAME"; // name token
+            bodyComponent.subtitleNameToken = "X_SUBTITLE"; // subtitle token- used for umbras
             bodyComponent.bodyFlags = CharacterBody.BodyFlags.ImmuneToExecutes;
             bodyComponent.rootMotionInMainState = false;
             bodyComponent.mainRootSpeed = 0;
-            bodyComponent.baseMaxHealth = 150;
-            bodyComponent.levelMaxHealth = 25;
-            bodyComponent.baseRegen = 0.85f;
-            bodyComponent.levelRegen = 0.55f;
+            bodyComponent.baseMaxHealth = 100;
+            bodyComponent.levelMaxHealth = 25.8f;
+            bodyComponent.baseRegen = 0.58f;
+            bodyComponent.levelRegen = 0.4f;
             bodyComponent.baseMaxShield = 0;
             bodyComponent.levelMaxShield = 0.25f;
-            bodyComponent.baseMoveSpeed = 8;
+            bodyComponent.baseMoveSpeed = 7.5f;
             bodyComponent.levelMoveSpeed = 0.25f;
             bodyComponent.baseAcceleration = 85;
-            bodyComponent.baseJumpPower = 18;
+            bodyComponent.baseJumpPower = 15;
             bodyComponent.levelJumpPower = 0.35f;
-            bodyComponent.baseDamage = 25;
-            bodyComponent.levelDamage = 5f;
-            bodyComponent.baseAttackSpeed = 1.8f;
+            bodyComponent.baseDamage = 20;
+            bodyComponent.levelDamage = 4f;
+            bodyComponent.baseAttackSpeed = 1.4f;
             bodyComponent.levelAttackSpeed = 0.2f;
             bodyComponent.baseCrit = 1;
             bodyComponent.levelCrit = 0.35f;
@@ -345,22 +345,22 @@ namespace ExampleSurvivor
         private void RegisterCharacter()
         {
             // now that the body prefab's set up, clone it here to make the display prefab
-            characterDisplay = PrefabAPI.InstantiateClone(characterPrefab.GetComponent<ModelLocator>().modelBaseTransform.gameObject, "ExampleSurvivorDisplay", true, "C:\\Users\\test\\Documents\\ror2mods\\ExampleSurvivor\\ExampleSurvivor\\ExampleSurvivor\\ExampleSurvivor.cs", "RegisterCharacter", 153);
+            characterDisplay = PrefabAPI.InstantiateClone(characterPrefab.GetComponent<ModelLocator>().modelBaseTransform.gameObject, "XDisplay", true, "C:\\Users\\test\\Documents\\ror2mods\\MegamanX\\MegamanX\\MegamanX\\MegamanX.cs", "RegisterCharacter", 153);
             characterDisplay.AddComponent<NetworkIdentity>();
 
             // clone rex's syringe projectile prefab here to use as our own projectile
-            arrowProjectile = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("prefabs/projectiles/MageIceBolt"), "Prefabs/Projectiles/ExampleArrowProjectile", true, "C:\\Users\\test\\Documents\\ror2mods\\ExampleSurvivor\\ExampleSurvivor\\ExampleSurvivor\\ExampleSurvivor.cs", "RegisterCharacter", 155);
+            XShot = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("prefabs/projectiles/MageIceBolt"), "Prefabs/Projectiles/XshotProjectile", true, "C:\\Users\\test\\Documents\\ror2mods\\MegamanX\\MegamanX\\MegamanX\\MegamanX.cs", "RegisterCharacter", 155);
 
             // just setting the numbers to 1 as the entitystate will take care of those
-            arrowProjectile.GetComponent<ProjectileController>().procCoefficient = 1f;
-            arrowProjectile.GetComponent<ProjectileDamage>().damage = 1f;
-            arrowProjectile.GetComponent<ProjectileDamage>().damageType = DamageType.Generic;
+            XShot.GetComponent<ProjectileController>().procCoefficient = 1f;
+            XShot.GetComponent<ProjectileDamage>().damage = 1f;
+            XShot.GetComponent<ProjectileDamage>().damageType = DamageType.Generic;
 
             // register it for networking
-            if (arrowProjectile) PrefabAPI.RegisterNetworkPrefab(arrowProjectile);
+            if (XShot) PrefabAPI.RegisterNetworkPrefab(XShot);
 
             // clone FMJ's syringe projectile prefab here to use as our own projectile
-            iceBombProjectile = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("prefabs/projectiles/MageIceBombProjectile"), "Prefabs/Projectiles/ExampleArrowProjectile", true, "C:\\Users\\test\\Documents\\ror2mods\\ExampleSurvivor\\ExampleSurvivor\\ExampleSurvivor\\ExampleSurvivor.cs", "RegisterCharacter", 155);
+            iceBombProjectile = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("prefabs/projectiles/MageIceBombProjectile"), "Prefabs/Projectiles/ShotgIceProjectile", true, "C:\\Users\\test\\Documents\\ror2mods\\MegamanX\\MegamanX\\MegamanX\\MegamanX.cs", "RegisterCharacter", 155);
 
             // just setting the numbers to 1 as the entitystate will take care of those
             iceBombProjectile.GetComponent<ProjectileDamage>().damage = 1f;
@@ -371,7 +371,7 @@ namespace ExampleSurvivor
             if (iceBombProjectile) PrefabAPI.RegisterNetworkPrefab(iceBombProjectile);
 
             // clone FMJ's syringe projectile prefab here to use as our own projectile
-            chargeProjectile = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("prefabs/projectiles/MageFirebolt"), "Prefabs/Projectiles/ExampleArrowProjectile", true, "C:\\Users\\test\\Documents\\ror2mods\\ExampleSurvivor\\ExampleSurvivor\\ExampleSurvivor\\ExampleSurvivor.cs", "RegisterCharacter", 155);
+            chargeProjectile = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("prefabs/projectiles/MageFirebolt"), "Prefabs/Projectiles/XShotCProjectile", true, "C:\\Users\\test\\Documents\\ror2mods\\MegamanX\\MegamanX\\MegamanX\\MegamanX.cs", "RegisterCharacter", 155);
 
             // just setting the numbers to 1 as the entitystate will take care of those
             chargeProjectile.GetComponent<ProjectileDamage>().damage = 1f;
@@ -382,7 +382,7 @@ namespace ExampleSurvivor
             if (chargeProjectile) PrefabAPI.RegisterNetworkPrefab(chargeProjectile);
 
             // clone Lunar's syringe projectile prefab here to use as our own projectile
-            greenNProjectile = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("prefabs/projectiles/MissileProjectile"), "Prefabs/Projectiles/ExampleArrowProjectile", true, "C:\\Users\\test\\Documents\\ror2mods\\ExampleSurvivor\\ExampleSurvivor\\ExampleSurvivor\\ExampleSurvivor.cs", "RegisterCharacter", 155);
+            greenNProjectile = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("prefabs/projectiles/MissileProjectile"), "Prefabs/Projectiles/GreenNProjectile", true, "C:\\Users\\test\\Documents\\ror2mods\\MegamanX\\MegamanX\\MegamanX\\MegamanX.cs", "RegisterCharacter", 155);
 
             // just setting the numbers to 1 as the entitystate will take care of those
             greenNProjectile.GetComponent<ProjectileDamage>().damage = 1f;
@@ -395,7 +395,7 @@ namespace ExampleSurvivor
 
             //--------------------------------------------------------------------------------------------------------------
             // clone Lunar's syringe projectile prefab here to use as our own projectile
-            meltCreeper = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("prefabs/projectiles/MageFirewallWalkerProjectile"), "Prefabs/Projectiles/ExampleArrowProjectile", true, "C:\\Users\\test\\Documents\\ror2mods\\ExampleSurvivor\\ExampleSurvivor\\ExampleSurvivor\\ExampleSurvivor.cs", "RegisterCharacter", 155);
+            meltCreeper = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("prefabs/projectiles/MageFirewallWalkerProjectile"), "Prefabs/Projectiles/MeltCProjectile", true, "C:\\Users\\test\\Documents\\ror2mods\\MegamanX\\MegamanX\\MegamanX\\MegamanX.cs", "RegisterCharacter", 155);
 
 
             // just setting the numbers to 1 as the entitystate will take care of those
@@ -409,21 +409,21 @@ namespace ExampleSurvivor
 
             //--------------------------------------------------------------------------------------------------------------
             // clone Lunar's syringe projectile prefab here to use as our own projectile
-            meltCreeperC = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("prefabs/projectiles/MageFirewallSeedProjectile"), "Prefabs/Projectiles/ExampleArrowProjectile", true, "C:\\Users\\test\\Documents\\ror2mods\\ExampleSurvivor\\ExampleSurvivor\\ExampleSurvivor\\ExampleSurvivor.cs", "RegisterCharacter", 155);
+            meltCreeperC = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("prefabs/projectiles/MageFirewallSeedProjectile"), "Prefabs/Projectiles/MeltCCProjectile", true, "C:\\Users\\test\\Documents\\ror2mods\\MegamanX\\MegamanX\\MegamanX\\MegamanX.cs", "RegisterCharacter", 155);
 
 
             // just setting the numbers to 1 as the entitystate will take care of those
             meltCreeperC.GetComponent<ProjectileDamage>().damage = 1f;
             meltCreeperC.GetComponent<ProjectileController>().procCoefficient = 1f;
             meltCreeperC.GetComponent<ProjectileDamage>().damageType = DamageType.IgniteOnHit;
-            
+
 
             // register it for networking
             if (meltCreeperC) PrefabAPI.RegisterNetworkPrefab(meltCreeperC);
             //---------------------------------------------------------------------------------------------------------------
 
             // clone Lunar's syringe projectile prefab here to use as our own projectile
-            squeezeBomb = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("prefabs/projectiles/GravSphere"), "Prefabs/Projectiles/ExampleArrowProjectile", true, "C:\\Users\\test\\Documents\\ror2mods\\ExampleSurvivor\\ExampleSurvivor\\ExampleSurvivor\\ExampleSurvivor.cs", "RegisterCharacter", 155);
+            squeezeBomb = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("prefabs/projectiles/GravSphere"), "Prefabs/Projectiles/SqueezeBProjectile", true, "C:\\Users\\test\\Documents\\ror2mods\\MegamanX\\MegamanX\\MegamanX\\MegamanX.cs", "RegisterCharacter", 155);
 
 
             // just setting the numbers to 1 as the entitystate will take care of those
@@ -435,11 +435,23 @@ namespace ExampleSurvivor
             if (squeezeBomb) PrefabAPI.RegisterNetworkPrefab(squeezeBomb);
             //---------------------------------------------------------------------------------------------------------------
 
+            // clone Lunar's syringe projectile prefab here to use as our own projectile
+            shotFMJ = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("prefabs/projectiles/FMJ"), "Prefabs/Projectiles/shotFMJProjectile", true, "C:\\Users\\test\\Documents\\ror2mods\\MegamanX\\MegamanX\\MegamanX\\MegamanX.cs", "RegisterCharacter", 155);
+
+
+            // just setting the numbers to 1 as the entitystate will take care of those
+            shotFMJ.GetComponent<ProjectileDamage>().damage = 1f;
+            shotFMJ.GetComponent<ProjectileController>().procCoefficient = 1f;
+            shotFMJ.GetComponent<ProjectileDamage>().damageType = DamageType.BypassArmor;
+
+            // register it for networking
+            if (shotFMJ) PrefabAPI.RegisterNetworkPrefab(shotFMJ);
+            //
 
 
             //--------------------------------------------------------------------------------------------------------------
             // clone Lunar's syringe projectile prefab here to use as our own projectile
-            testProjectile = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("prefabs/projectiles/GravSphere"), "Prefabs/Projectiles/ExampleArrowProjectile", true, "C:\\Users\\test\\Documents\\ror2mods\\ExampleSurvivor\\ExampleSurvivor\\ExampleSurvivor\\ExampleSurvivor.cs", "RegisterCharacter", 155);
+            testProjectile = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("prefabs/projectiles/GravSphere"), "Prefabs/Projectiles/TestExampleArrowProjectile", true, "C:\\Users\\test\\Documents\\ror2mods\\MegamanX\\MegamanX\\MegamanX\\MegamanX.cs", "RegisterCharacter", 155);
 
 
             // just setting the numbers to 1 as the entitystate will take care of those
@@ -454,7 +466,7 @@ namespace ExampleSurvivor
             // add it to the projectile catalog or it won't work in multiplayer
             ProjectileCatalog.getAdditionalEntries += list =>
             {
-                list.Add(arrowProjectile);
+                list.Add(XShot);
                 list.Add(chargeProjectile);
                 list.Add(iceBombProjectile);
                 list.Add(greenNProjectile);
@@ -462,6 +474,7 @@ namespace ExampleSurvivor
                 list.Add(meltCreeper);
                 list.Add(meltCreeperC);
                 list.Add(squeezeBomb);
+                list.Add(shotFMJ);
             };
 
 
@@ -473,16 +486,16 @@ namespace ExampleSurvivor
             desc = desc + "< ! > X shoots a bamboo-rocket which pursues enemies.</color>" + Environment.NewLine + Environment.NewLine;
 
             // add the language tokens
-            LanguageAPI.Add("EXAMPLESURVIVOR_NAME", "X");
-            LanguageAPI.Add("EXAMPLESURVIVOR_DESCRIPTION", desc);
-            LanguageAPI.Add("EXAMPLESURVIVOR_SUBTITLE", "Megaman X, B class Hunter");
+            LanguageAPI.Add("X_NAME", "X");
+            LanguageAPI.Add("X_DESCRIPTION", desc);
+            LanguageAPI.Add("X_SUBTITLE", "Megaman X, B class Hunter");
 
             // add our new survivor to the game~
             SurvivorDef survivorDef = new SurvivorDef
             {
-                name = "EXAMPLESURVIVOR_NAME",
+                name = "X_NAME",
                 unlockableName = "",
-                descriptionToken = "EXAMPLESURVIVOR_DESCRIPTION",
+                descriptionToken = "X_DESCRIPTION",
                 primaryColor = characterColor,
                 bodyPrefab = characterPrefab,
                 displayPrefab = characterDisplay
@@ -525,6 +538,9 @@ namespace ExampleSurvivor
             LoadoutAPI.AddSkill(typeof(ShotgunIce));
             LoadoutAPI.AddSkill(typeof(DodgeState));
             LoadoutAPI.AddSkill(typeof(greenSpinner));
+            LoadoutAPI.AddSkill(typeof(meltCreeper));
+            LoadoutAPI.AddSkill(typeof(FKBuster));
+            LoadoutAPI.AddSkill(typeof(squeezeBomb));
         }
 
         void PassiveSetup()
@@ -532,12 +548,12 @@ namespace ExampleSurvivor
             // set up the passive skill here if you want
             SkillLocator component = characterPrefab.GetComponent<SkillLocator>();
 
-            LanguageAPI.Add("EXAMPLESURVIVOR_PASSIVE_NAME", "Limitless Potential");
-            LanguageAPI.Add("EXAMPLESURVIVOR_PASSIVE_DESCRIPTION", "<style=cIsUtility>X's true potential still unachieved, but his adaptation and improvement grows super fast</style> <style=cIsHealing>AttackPower, Life Regen, armor and shields grows on Level Up increase</style>.");
+            LanguageAPI.Add("X_PASSIVE_NAME", "Limitless Potential");
+            LanguageAPI.Add("X_PASSIVE_DESCRIPTION", "<style=cIsUtility>X's true potential still unachieved, but his adaptation and improvement grow's super fast</style> <style=cIsHealing>AttackPower, Life Regen, armor and shields grows on Level Up increase</style>.");
 
             component.passiveSkill.enabled = true;
-            component.passiveSkill.skillNameToken = "EXAMPLESURVIVOR_PASSIVE_NAME";
-            component.passiveSkill.skillDescriptionToken = "EXAMPLESURVIVOR_PASSIVE_DESCRIPTION";
+            component.passiveSkill.skillNameToken = "X_PASSIVE_NAME";
+            component.passiveSkill.skillDescriptionToken = "X_PASSIVE_DESCRIPTION";
             component.passiveSkill.icon = Assets.iconP;
         }
 
@@ -545,8 +561,8 @@ namespace ExampleSurvivor
         {
             SkillLocator component = characterPrefab.GetComponent<SkillLocator>();
 
-            LanguageAPI.Add("EXAMPLESURVIVOR_PRIMARY_CROSSBOW_NAME", "X-Buster");
-            LanguageAPI.Add("EXAMPLESURVIVOR_PRIMARY_CROSSBOW_DESCRIPTION", "Shoot with X-Buster, dealing <style=cIsDamage>170% damage</style>.");
+            LanguageAPI.Add("X_PRIMARY_CROSSBOW_NAME", "X-Buster");
+            LanguageAPI.Add("X_PRIMARY_CROSSBOW_DESCRIPTION", "Shoot with X-Buster, dealing <style=cIsDamage>170% damage</style>.");
 
             // set up your primary skill def here!
 
@@ -568,9 +584,9 @@ namespace ExampleSurvivor
             mySkillDef.shootDelay = 0f;
             mySkillDef.stockToConsume = 1;
             mySkillDef.icon = Assets.icon1;
-            mySkillDef.skillDescriptionToken = "EXAMPLESURVIVOR_PRIMARY_CROSSBOW_DESCRIPTION";
-            mySkillDef.skillName = "EXAMPLESURVIVOR_PRIMARY_CROSSBOW_NAME";
-            mySkillDef.skillNameToken = "EXAMPLESURVIVOR_PRIMARY_CROSSBOW_NAME";
+            mySkillDef.skillDescriptionToken = "X_PRIMARY_CROSSBOW_DESCRIPTION";
+            mySkillDef.skillName = "X_PRIMARY_CROSSBOW_NAME";
+            mySkillDef.skillNameToken = "X_PRIMARY_CROSSBOW_NAME";
 
             LoadoutAPI.AddSkillDef(mySkillDef);
 
@@ -588,24 +604,54 @@ namespace ExampleSurvivor
                 viewableNode = new ViewablesCatalog.Node(mySkillDef.skillNameToken, false, null)
             };
 
+            // alternate skill secondary Squeeze Bomb
+
+            LanguageAPI.Add("X_PRIMARY_V_NAME", "FK-Buster");
+            LanguageAPI.Add("X_PRIMARY_V_DESCRIPTION", "Shoot with FK-Buster, dealing <style=cIsDamage>125% damage</style>. his charged attack bypass some enemies armor");
+
+            // set up your primary skill def here!
+
+            mySkillDef = ScriptableObject.CreateInstance<SkillDef>();
+            mySkillDef.activationState = new SerializableEntityStateType(typeof(FKBuster));
+            mySkillDef.activationStateMachineName = "Weapon";
+            mySkillDef.baseMaxStock = 1;
+            mySkillDef.baseRechargeInterval = 0;
+            mySkillDef.beginSkillCooldownOnSkillEnd = false;
+            mySkillDef.canceledFromSprinting = false;
+            mySkillDef.fullRestockOnAssign = true;
+            mySkillDef.interruptPriority = InterruptPriority.Any;
+            mySkillDef.isBullets = false;
+            mySkillDef.isCombatSkill = true;
+            mySkillDef.mustKeyPress = true;
+            mySkillDef.noSprint = true;
+            mySkillDef.rechargeStock = 1;
+            mySkillDef.requiredStock = 1;
+            mySkillDef.shootDelay = 0;
+            mySkillDef.stockToConsume = 1;
+            mySkillDef.icon = Assets.icon7;
+            mySkillDef.skillDescriptionToken = "X_PRIMARY_V_DESCRIPTION";
+            mySkillDef.skillName = "X_PRIMARY_V_NAME";
+            mySkillDef.skillNameToken = "X_PRIMARY_V_NAME";
+
+            LoadoutAPI.AddSkillDef(mySkillDef);
 
             // add this code after defining a new skilldef if you're adding an alternate skill
 
-            /*Array.Resize(ref skillFamily.variants, skillFamily.variants.Length + 1);
+            Array.Resize(ref skillFamily.variants, skillFamily.variants.Length + 1);
             skillFamily.variants[skillFamily.variants.Length - 1] = new SkillFamily.Variant
             {
-                skillDef = newSkillDef,
+                skillDef = mySkillDef,
                 unlockableName = "",
-                viewableNode = new ViewablesCatalog.Node(newSkillDef.skillNameToken, false, null)
-            };*/
+                viewableNode = new ViewablesCatalog.Node(mySkillDef.skillNameToken, false, null)
+            };
         }
 
-        void SecondarySetup() 
+        void SecondarySetup()
         {
             SkillLocator component = characterPrefab.GetComponent<SkillLocator>();
 
-            LanguageAPI.Add("EXAMPLESURVIVOR_PRIMARY_CROSSBOW2_NAME", "ShotgunIce");
-            LanguageAPI.Add("EXAMPLESURVIVOR_PRIMARY_CROSSBOW2_DESCRIPTION", "Shoot an IceMissle that pierce enemies, dealing <style=cIsDamage>200% damage</style>.");
+            LanguageAPI.Add("X_PRIMARY_CROSSBOW2_NAME", "ShotgunIce");
+            LanguageAPI.Add("X_PRIMARY_CROSSBOW2_DESCRIPTION", "Shoot an IceMissle that pierce enemies, dealing <style=cIsDamage>200% damage</style>.");
 
             // set up your primary skill def here!
 
@@ -627,9 +673,9 @@ namespace ExampleSurvivor
             mySkillDef.shootDelay = 1f;
             mySkillDef.stockToConsume = 1;
             mySkillDef.icon = Assets.icon2;
-            mySkillDef.skillDescriptionToken = "EXAMPLESURVIVOR_PRIMARY_CROSSBOW2_DESCRIPTION";
-            mySkillDef.skillName = "EXAMPLESURVIVOR_PRIMARY_CROSSBOW2_NAME";
-            mySkillDef.skillNameToken = "EXAMPLESURVIVOR_PRIMARY_CROSSBOW2_NAME";
+            mySkillDef.skillDescriptionToken = "X_PRIMARY_CROSSBOW2_DESCRIPTION";
+            mySkillDef.skillName = "X_PRIMARY_CROSSBOW2_NAME";
+            mySkillDef.skillNameToken = "X_PRIMARY_CROSSBOW2_NAME";
 
             LoadoutAPI.AddSkillDef(mySkillDef);
 
@@ -650,8 +696,8 @@ namespace ExampleSurvivor
 
             // alternate skill secondary Squeeze Bomb
 
-            LanguageAPI.Add("EXAMPLESURVIVOR_PRIMARY_CROSSBOW2V_NAME", "Squeeze Bomb");
-            LanguageAPI.Add("EXAMPLESURVIVOR_PRIMARY_CROSSBOW2V_DESCRIPTION", "A gravity-based weapon. Creates localized black holes that hold up enemies.");
+            LanguageAPI.Add("X_PRIMARY_CROSSBOW2V_NAME", "Squeeze Bomb");
+            LanguageAPI.Add("X_PRIMARY_CROSSBOW2V_DESCRIPTION", "A gravity-based weapon. Creates localized black holes that hold up enemies.");
 
             // set up your primary skill def here!
 
@@ -672,10 +718,10 @@ namespace ExampleSurvivor
             mySkillDef.requiredStock = 1;
             mySkillDef.shootDelay = 0.5f;
             mySkillDef.stockToConsume = 1;
-            mySkillDef.icon = Assets.icon5;
-            mySkillDef.skillDescriptionToken = "EXAMPLESURVIVOR_PRIMARY_CROSSBOW2V_DESCRIPTION";
-            mySkillDef.skillName = "EXAMPLESURVIVOR_PRIMARY_CROSSBOW2V_NAME";
-            mySkillDef.skillNameToken = "EXAMPLESURVIVOR_PRIMARY_CROSSBOW2V_NAME";
+            mySkillDef.icon = Assets.icon6;
+            mySkillDef.skillDescriptionToken = "X_PRIMARY_CROSSBOW2V_DESCRIPTION";
+            mySkillDef.skillName = "X_PRIMARY_CROSSBOW2V_NAME";
+            mySkillDef.skillNameToken = "X_PRIMARY_CROSSBOW2V_NAME";
 
             LoadoutAPI.AddSkillDef(mySkillDef);
 
@@ -694,8 +740,8 @@ namespace ExampleSurvivor
         {
             SkillLocator component = characterPrefab.GetComponent<SkillLocator>();
 
-            LanguageAPI.Add("EXAMPLESURVIVOR_PRIMARY_CROSSBOW3_NAME", "Dash");
-            LanguageAPI.Add("EXAMPLESURVIVOR_PRIMARY_CROSSBOW3_DESCRIPTION", "<style=cIsDamage>Perform a Dash</style>.");
+            LanguageAPI.Add("X_PRIMARY_CROSSBOW3_NAME", "Dash");
+            LanguageAPI.Add("X_PRIMARY_CROSSBOW3_DESCRIPTION", "<style=cIsDamage>Perform a Dash</style>.");
 
             // set up your primary skill def here!
 
@@ -717,9 +763,9 @@ namespace ExampleSurvivor
             mySkillDef.shootDelay = 0f;
             mySkillDef.stockToConsume = 1;
             mySkillDef.icon = Assets.icon3;
-            mySkillDef.skillDescriptionToken = "EXAMPLESURVIVOR_PRIMARY_CROSSBOW3_DESCRIPTION";
-            mySkillDef.skillName = "EXAMPLESURVIVOR_PRIMARY_CROSSBOW3_NAME";
-            mySkillDef.skillNameToken = "EXAMPLESURVIVOR_PRIMARY_CROSSBOW3_NAME";
+            mySkillDef.skillDescriptionToken = "X_PRIMARY_CROSSBOW3_DESCRIPTION";
+            mySkillDef.skillName = "EX_PRIMARY_CROSSBOW3_NAME";
+            mySkillDef.skillNameToken = "X_PRIMARY_CROSSBOW3_NAME";
 
             LoadoutAPI.AddSkillDef(mySkillDef);
 
@@ -753,8 +799,8 @@ namespace ExampleSurvivor
         {
             SkillLocator component = characterPrefab.GetComponent<SkillLocator>();
 
-            LanguageAPI.Add("EXAMPLESURVIVOR_PRIMARY_CROSSBOW4_NAME", "GreenNeedle");
-            LanguageAPI.Add("EXAMPLESURVIVOR_PRIMARY_CROSSBOW4_DESCRIPTION", "Shoot a small missle tha follow some targets, dealing <style=cIsDamage>145% base damage</style>.");
+            LanguageAPI.Add("X_PRIMARY_CROSSBOW4_NAME", "GreenNeedle");
+            LanguageAPI.Add("X_PRIMARY_CROSSBOW4_DESCRIPTION", "Shoot a small missle tha follow some targets, dealing <style=cIsDamage>145% base damage</style>.");
 
             // set up your primary skill def here!
 
@@ -776,9 +822,9 @@ namespace ExampleSurvivor
             mySkillDef.shootDelay = 0.3f;
             mySkillDef.stockToConsume = 1;
             mySkillDef.icon = Assets.icon4;
-            mySkillDef.skillDescriptionToken = "EXAMPLESURVIVOR_PRIMARY_CROSSBOW4_DESCRIPTION";
-            mySkillDef.skillName = "EXAMPLESURVIVOR_PRIMARY_CROSSBOW4_NAME";
-            mySkillDef.skillNameToken = "EXAMPLESURVIVOR_PRIMARY_CROSSBOW4_NAME";
+            mySkillDef.skillDescriptionToken = "X_PRIMARY_CROSSBOW4_DESCRIPTION";
+            mySkillDef.skillName = "X_PRIMARY_CROSSBOW4_NAME";
+            mySkillDef.skillNameToken = "X_PRIMARY_CROSSBOW4_NAME";
 
             LoadoutAPI.AddSkillDef(mySkillDef);
 
@@ -798,8 +844,8 @@ namespace ExampleSurvivor
 
             // alternate skill special testprojectile
 
-            LanguageAPI.Add("EXAMPLESURVIVOR_PRIMARY_CROSSBOW4V_NAME", "Melt Creeper");
-            LanguageAPI.Add("EXAMPLESURVIVOR_PRIMARY_CROSSBOW4V_DESCRIPTION", " It sends a small wave of flames on the ground, dealing <style=cIsDamage>200% base damage</style>, When charged up, it sends flames both sides, dealing even more damage");
+            LanguageAPI.Add("X_PRIMARY_CROSSBOW4V_NAME", "Melt Creeper");
+            LanguageAPI.Add("X_PRIMARY_CROSSBOW4V_DESCRIPTION", " It sends a small wave of flames on the ground, dealing <style=cIsDamage>200% base damage</style>, When charged up, it sends flames both sides, dealing even more damage");
 
             // set up your primary skill def here!
 
@@ -821,9 +867,9 @@ namespace ExampleSurvivor
             mySkillDef.shootDelay = 0.5f;
             mySkillDef.stockToConsume = 1;
             mySkillDef.icon = Assets.icon5;
-            mySkillDef.skillDescriptionToken = "EXAMPLESURVIVOR_PRIMARY_CROSSBOW4V_DESCRIPTION";
-            mySkillDef.skillName = "EXAMPLESURVIVOR_PRIMARY_CROSSBOW4V_NAME";
-            mySkillDef.skillNameToken = "EXAMPLESURVIVOR_PRIMARY_CROSSBOW4V_NAME";
+            mySkillDef.skillDescriptionToken = "X_PRIMARY_CROSSBOW4V_DESCRIPTION";
+            mySkillDef.skillName = "X_PRIMARY_CROSSBOW4V_NAME";
+            mySkillDef.skillNameToken = "X_PRIMARY_CROSSBOW4V_NAME";
 
             LoadoutAPI.AddSkillDef(mySkillDef);
 
@@ -843,7 +889,7 @@ namespace ExampleSurvivor
             // set up the doppelganger for artifact of vengeance here
             // quite simple, gets a bit more complex if you're adding your own ai, but commando ai will do
 
-            doppelganger = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/CharacterMasters/CommandoMonsterMaster"), "ExampleSurvivorMonsterMaster", true, "C:\\Users\\test\\Documents\\ror2mods\\ExampleSurvivor\\ExampleSurvivor\\ExampleSurvivor\\ExampleSurvivor.cs", "CreateDoppelganger", 159);
+            doppelganger = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/CharacterMasters/CommandoMonsterMaster"), "XMonsterMaster", true, "C:\\Users\\test\\Documents\\ror2mods\\MegamanX\\MegamanX\\MegamanX\\MegamanX.cs", "CreateDoppelganger", 159);
 
             MasterCatalog.getAdditionalEntries += delegate (List<GameObject> list)
             {
@@ -855,7 +901,7 @@ namespace ExampleSurvivor
         }
     }
 
-    
+
 
     // get the assets from your assetbundle here
     // if it's returning null, check and make sure you have the build action set to "Embedded Resource" and the file names are right because it's not gonna work otherwise
@@ -872,6 +918,8 @@ namespace ExampleSurvivor
         public static Sprite icon3;
         public static Sprite icon4;
         public static Sprite icon5;
+        public static Sprite icon6;
+        public static Sprite icon7;
 
         public static void PopulateAssets()
         {
@@ -901,6 +949,8 @@ namespace ExampleSurvivor
             icon3 = MainAssetBundle.LoadAsset<Sprite>("Skill3Icon");
             icon4 = MainAssetBundle.LoadAsset<Sprite>("Skill4Icon");
             icon5 = MainAssetBundle.LoadAsset<Sprite>("Skill5Icon");
+            icon6 = MainAssetBundle.LoadAsset<Sprite>("Skill6Icon");
+            icon7 = MainAssetBundle.LoadAsset<Sprite>("Skill7Icon");
         }
     }
 }
@@ -933,9 +983,10 @@ namespace EntityStates.ExampleSurvivorStates
     public class chargeShot : BaseSkillState
     {
         public float damageCoefficient = 1.7f;
-        public float baseDuration = 0.55f;
+        public float baseDuration = 0.6f;
         public float recoil = 0.7f;
-        public static GameObject tracerEffectPrefab = Resources.Load<GameObject>("Prefabs/Effects/Tracers/TracerToolbotRebar");
+        public static GameObject tracerEffectPrefab = Resources.Load<GameObject>("prefabs/effects/tracers/TracerBanditShotgun");
+        public static GameObject hitEffectPrefab = Resources.Load<GameObject>("prefabs/effects/impacteffects/HitsparkCaptainShotgun");
 
 
 
@@ -981,7 +1032,22 @@ namespace EntityStates.ExampleSurvivorStates
                 if (base.isAuthority)
                 {
                     Util.PlaySound(Sounds.xBullet, base.gameObject);
-                    ProjectileManager.instance.FireProjectile(ExampleSurvivor.MegamanXMod.arrowProjectile, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageCoefficient * this.damageStat, 0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1f);
+                    //ProjectileManager.instance.FireProjectile(MegamanX.MegamanXMod.XShot, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageCoefficient * this.damageStat, 0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1f);
+                    new BulletAttack
+                    {
+                        owner = base.gameObject,
+                        weapon = base.gameObject,
+                        origin = aimRay.origin,
+                        aimVector = aimRay.direction,
+                        minSpread = 0.1f,
+                        maxSpread = 0.4f,
+                        damage = damageCoefficient * this.damageStat,
+                        force = 1f,
+                        tracerEffectPrefab = chargeShot.tracerEffectPrefab,
+                        muzzleName = muzzleString,
+                        hitEffectPrefab = chargeShot.hitEffectPrefab,
+                        isCrit = Util.CheckRoll(this.critStat, base.characterBody.master)
+                    }.Fire();
                 }
             }
         }
@@ -997,7 +1063,7 @@ namespace EntityStates.ExampleSurvivorStates
                 if (base.isAuthority)
                 {
                     Util.PlaySound(Sounds.xChargeShot, base.gameObject);
-                    ProjectileManager.instance.FireProjectile(ExampleSurvivor.MegamanXMod.chargeProjectile, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageCoefficient * 4f * this.damageStat, 0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1f);
+                    ProjectileManager.instance.FireProjectile(MegamanX.MegamanXMod.chargeProjectile, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageCoefficient * 4f * this.damageStat, 0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1f);
                 }
             }
         }
@@ -1078,7 +1144,7 @@ namespace EntityStates.ExampleSurvivorStates
         public float baseDuration = 0.75f;
         public float recoil = 0.5f;
         public static GameObject tracerEffectPrefab = Resources.Load<GameObject>("Prefabs/Effects/Tracers/TracerToolbotRebar");
-       
+
 
         private float duration;
         // Token: 0x06003E4C RID: 15948 RVA: 0x001043C4 File Offset: 0x001025C4
@@ -1117,7 +1183,7 @@ namespace EntityStates.ExampleSurvivorStates
             {
                 Ray aimRay = base.GetAimRay();
                 aimRay.direction = Util.ApplySpread(aimRay.direction, this.minSpread, this.maxSpread, 1f, 1f, 0f, this.projectilePitchBonus);
-                ProjectileManager.instance.FireProjectile(ExampleSurvivor.MegamanXMod.iceBombProjectile, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageStat * this.damageCoefficient, this.force, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1f);
+                ProjectileManager.instance.FireProjectile(MegamanX.MegamanXMod.iceBombProjectile, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageStat * this.damageCoefficient, this.force, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1f);
             }
         }
 
@@ -1187,7 +1253,7 @@ namespace EntityStates.ExampleSurvivorStates
         private bool firedProjectile;
 
     }
-   
+
 }
 
 namespace EntityStates.ExampleSurvivorStates
@@ -1236,7 +1302,7 @@ namespace EntityStates.ExampleSurvivorStates
                 {
                     UnityEngine.Object.Instantiate<GameObject>(DodgeState.jetEffect, transform2);
                 }
-                
+
             }
             this.RecalculateRollSpeed();
             if (base.characterMotor && base.characterDirection)
@@ -1312,7 +1378,7 @@ namespace EntityStates.ExampleSurvivorStates
         public float initialSpeedCoefficient = 5.8f;
 
         // Token: 0x0400392F RID: 14639
- 
+
         public float finalSpeedCoefficient = 4.8f;
 
         // Token: 0x04003930 RID: 14640
@@ -1382,7 +1448,7 @@ namespace EntityStates.ExampleSurvivorStates
                 if (base.isAuthority)
                 {
                     Util.PlaySound(Sounds.greenSpinner, base.gameObject);
-                    ProjectileManager.instance.FireProjectile(ExampleSurvivor.MegamanXMod.greenNProjectile, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageCoefficient * this.damageStat, 0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1f);
+                    ProjectileManager.instance.FireProjectile(MegamanX.MegamanXMod.greenNProjectile, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageCoefficient * this.damageStat, 0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1f);
                 }
             }
         }
@@ -1463,7 +1529,7 @@ namespace EntityStates.ExampleSurvivorStates
                 if (base.isAuthority)
                 {
                     Util.PlaySound(Sounds.meltCreeper, base.gameObject);
-                    ProjectileManager.instance.FireProjectile(ExampleSurvivor.MegamanXMod.meltCreeper, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageCoefficient * this.damageStat, 0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1f);
+                    ProjectileManager.instance.FireProjectile(MegamanX.MegamanXMod.meltCreeper, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageCoefficient * this.damageStat, 0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1f);
                 }
             }
         }
@@ -1479,7 +1545,7 @@ namespace EntityStates.ExampleSurvivorStates
                 if (base.isAuthority)
                 {
                     Util.PlaySound(Sounds.meltCreeper, base.gameObject);
-                    ProjectileManager.instance.FireProjectile(ExampleSurvivor.MegamanXMod.meltCreeperC, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageCoefficient * 1.4f * this.damageStat, 0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1f);
+                    ProjectileManager.instance.FireProjectile(MegamanX.MegamanXMod.meltCreeperC, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageCoefficient * 1.4f * this.damageStat, 0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1f);
                 }
             }
         }
@@ -1600,7 +1666,7 @@ namespace EntityStates.ExampleSurvivorStates
                 if (base.isAuthority)
                 {
                     //Util.PlaySound(Sounds.greenSpinner, base.gameObject);
-                    ProjectileManager.instance.FireProjectile(ExampleSurvivor.MegamanXMod.testProjectile, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageCoefficient * this.damageStat, 0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1f);
+                    ProjectileManager.instance.FireProjectile(MegamanX.MegamanXMod.testProjectile, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageCoefficient * this.damageStat, 0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1f);
                 }
             }
         }
@@ -1674,7 +1740,7 @@ namespace EntityStates.ExampleSurvivorStates
                 if (base.isAuthority)
                 {
                     Util.PlaySound(Sounds.squeezeBomb, base.gameObject);
-                    ProjectileManager.instance.FireProjectile(ExampleSurvivor.MegamanXMod.squeezeBomb, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageCoefficient * this.damageStat, 0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1f);
+                    ProjectileManager.instance.FireProjectile(MegamanX.MegamanXMod.squeezeBomb, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageCoefficient * this.damageStat, 0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1f);
                 }
             }
         }
@@ -1700,4 +1766,163 @@ namespace EntityStates.ExampleSurvivorStates
         }
     }
 
+}
+
+namespace EntityStates.ExampleSurvivorStates
+{
+    public class FKBuster : BaseSkillState
+    {
+        public float damageCoefficient = 1.25f;
+        public float baseDuration = 0.48f;
+        public float recoil = 0.5f;
+        public static GameObject tracerEffectPrefab = Resources.Load<GameObject>("prefabs/effects/tracers/TracerBanditPistol");
+        public static GameObject hitEffectPrefab = Resources.Load<GameObject>("prefabs/effects/impacteffects/BulletImpactSoft");
+
+
+
+        public float chargeTime = 0f;
+        public float LastChargeTime = 0f;
+        public bool chargeFullSFX = false;
+        public bool hasTime = false;
+        public bool hasCharged = false;
+        public bool chargingSFX = false;
+
+
+
+        private float duration;
+        private float fireDuration;
+        private bool hasFired;
+        private Animator animator;
+        private string muzzleString;
+
+        public override void OnEnter()
+        {
+            base.OnEnter();
+            this.duration = this.baseDuration / this.attackSpeedStat;
+            this.fireDuration = 0.25f * this.duration;
+            base.characterBody.SetAimTimer(2f);
+            this.animator = base.GetModelAnimator();
+            this.muzzleString = "Muzzle";
+            base.PlayAnimation("Gesture, Override", "FireArrow", "FireArrow.playbackRate", this.duration);
+        }
+
+        public override void OnExit()
+        {
+            base.OnExit();
+        }
+
+        private void FireArrow()
+        {
+            if (!this.hasFired)
+            {
+                this.hasFired = true;
+                base.characterBody.AddSpreadBloom(0.75f);
+                Ray aimRay = base.GetAimRay();
+                EffectManager.SimpleMuzzleFlash(Commando.CommandoWeapon.FirePistol.effectPrefab, base.gameObject, this.muzzleString, false);
+                if (base.isAuthority)
+                {
+                    Util.PlaySound(Sounds.xBullet, base.gameObject);
+                    //ProjectileManager.instance.FireProjectile(XSurvivor.MegamanXMod.XShot, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageCoefficient * this.damageStat, 0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1f);
+                    new BulletAttack
+                    {
+                        owner = base.gameObject,
+                        weapon = base.gameObject,
+                        origin = aimRay.origin,
+                        aimVector = aimRay.direction,
+                        minSpread = 0.1f,
+                        maxSpread = 0.4f,
+                        damage = damageCoefficient * this.damageStat,
+                        force = 1f,
+                        tracerEffectPrefab = FKBuster.tracerEffectPrefab,
+                        muzzleName = muzzleString,
+                        hitEffectPrefab = FKBuster.hitEffectPrefab,
+                        isCrit = Util.CheckRoll(this.critStat, base.characterBody.master)
+                    }.Fire();
+                }
+            }
+        }
+
+        private void FireArrowC()
+        {
+            if (!this.hasFired)
+            {
+                this.hasFired = true;
+                base.characterBody.AddSpreadBloom(0.75f);
+                Ray aimRay = base.GetAimRay();
+                EffectManager.SimpleMuzzleFlash(Commando.CommandoWeapon.FirePistol.effectPrefab, base.gameObject, this.muzzleString, false);
+                if (base.isAuthority)
+                {
+                    base.PlayAnimation("Gesture, Override", "FireArrow", "FireArrow.playbackRate", this.duration);
+                    Util.PlaySound(Sounds.xChargeShot, base.gameObject);
+                    ProjectileManager.instance.FireProjectile(MegamanX.MegamanXMod.shotFMJ, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageCoefficient * 3.8f * this.damageStat, 0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1f);
+                }
+            }
+        }
+
+        public override void Update()
+        {
+            base.Update();
+            if (base.inputBank.skill1.down)
+            {
+                chargeTime += Time.deltaTime;
+
+                if (chargeTime > 0.5f && chargeTime <= 1.8f && chargingSFX == false)
+                {
+                    Util.PlaySound(Sounds.charging, base.gameObject);
+                    chargingSFX = true;
+                }
+
+                if (chargeTime >= 1.8f && chargeFullSFX == false)
+                {
+                    Util.PlaySound(Sounds.fullCharge, base.gameObject);
+                    chargeFullSFX = true;
+                    LastChargeTime = chargeTime;
+                }
+
+                if ((chargeTime - LastChargeTime) >= 0.68f && chargeFullSFX == true)
+                {
+                    Util.PlaySound(Sounds.fullCharge, base.gameObject);
+                    LastChargeTime = chargeTime;
+                }
+            }
+
+            if (!base.inputBank.skill1.down)
+            {
+                if (chargeTime >= 1.8f)
+                    hasCharged = true;
+                chargingSFX = false;
+                hasTime = true;
+            }
+
+        }
+
+
+        public override void FixedUpdate()
+        {
+            base.FixedUpdate();
+
+            if ((base.fixedAge >= this.fireDuration || !base.inputBank || !base.inputBank.skill1.down) && hasCharged == true && hasTime == true)
+            {
+                FireArrowC();
+            }
+
+            if ((base.fixedAge >= this.fireDuration || !base.inputBank || !base.inputBank.skill1.down) && hasCharged == false && hasTime == true)
+            {
+                FireArrow();
+            }
+
+            if (base.fixedAge >= this.duration && base.isAuthority && hasTime == true)
+            {
+                hasTime = false;
+                chargeTime = 0f;
+                this.outer.SetNextStateToMain();
+            }
+        }
+
+        public override InterruptPriority GetMinimumInterruptPriority()
+        {
+            return InterruptPriority.Skill;
+        }
+
+    }
 }

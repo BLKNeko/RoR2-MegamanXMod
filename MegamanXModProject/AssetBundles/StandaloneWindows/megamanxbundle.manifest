@@ -1,0 +1,87 @@
+ManifestFileVersion: 0
+CRC: 3689516731
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 9c0280868646e4b7a0c4ff31318de98a
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c2fe06b263380dac7d44374a9f4b997e
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 90
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+- Class: 95
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 67079b849227b734694872d8810229b8, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: aaabc320440a02340b0239f0cf1745a2, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 24f98ceb39626e542bce4568de94b61d, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 136
+  Script: {instanceID: 0}
+- Class: 137
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 319
+  Script: {instanceID: 0}
+Assets:
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/ExampleSurvivorRunForward.anim
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/BasicMotions@Sprint01.fbx
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Skill3Icon.png
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Textures/X.png
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Megaman_X_Icon.png
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Skill7Icon.png
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/BasicMotions@Run01.fbx
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/ExampleSurvivorRunBackward.anim
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/ExampleSurvivorFireArrow.anim
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/DeathAnimation.anim
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/MegamanXTestLobby.fbx
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/Dash.anim
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/ExampleSurvivorIdle.anim
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/mdlExampleSurvivorLX.prefab
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Skill2Icon.png
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/Run.anim
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/ExampleSurvivorJump.anim
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/ExampleSurvivorRunLeft.anim
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/ExampleSurvivorGestureMask.mask
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/ExampleSurvivorFallDown.anim
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/ExampleSurvivorRunRight.anim
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/ExampleSurvivorIdleIn.anim
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/10-death_fall_backward.fbx
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Skill4Icon.png
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/ExampleSurvivorFallUp.anim
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Skill6Icon.png
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Skill5Icon.png
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Materials/matExampleSurvivor 1.mat
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/ExampleSurvivorSprint.anim
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/TestShotH.anim
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/BasicMotions@Jump01.fbx
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/Looking_Around_02_MB_v01.fbx
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/OLDanimExampleSurvivor.controller
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/ExampleSurvivorDeath.anim
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/ShotgunIce.anim
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/PassiveIcon.png
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/MegamanXTestDash1.fbx
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Skill1Icon.png
+Dependencies: []
