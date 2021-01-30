@@ -27,7 +27,7 @@ namespace MegamanX
 
     [BepInDependency("com.bepis.r2api")]
 
-    [BepInPlugin(MODUID, "MegamanXMod", "1.4.5")] // put your own name and version here
+    [BepInPlugin(MODUID, "MegamanXMod", "1.6.6")] // put your own name and version here
     [R2APISubmoduleDependency(nameof(PrefabAPI), nameof(SurvivorAPI), nameof(LoadoutAPI), nameof(ItemAPI), nameof(DifficultyAPI), nameof(BuffAPI))] // need these dependencies for the mod to work properly
 
 
@@ -49,12 +49,15 @@ namespace MegamanX
         public static GameObject shotgunIceCharge; //prefab for shotgunIce charge
         public static GameObject redShot; //prefab for falcon Buster shot
         public static GameObject shotFMJ; //prefab for falcon buster CHARGE shot
+        public static GameObject aBurst; //prefab for AcidBurst
 
         public static GameObject testProjectile; // testes de projéteis
 
         public SkillLocator skillLocator;
 
         private static readonly Color characterColor = new Color(0.0f, 0.24f, 0.48f); // color used for the survivor
+
+
 
 
         private void Awake()
@@ -64,8 +67,10 @@ namespace MegamanX
             RegisterStates(); // register our skill entitystates for networking
             RegisterCharacter(); // and finally put our new survivor in the game
             CreateDoppelganger(); // not really mandatory, but it's simple and not having an umbra is just kinda lame
-
+            
         }
+
+      
 
         public static GameObject CreateModel(GameObject main)
         {
@@ -74,7 +79,7 @@ namespace MegamanX
             Destroy(main.transform.Find("AimOrigin").gameObject);
 
             // make sure it's set up right in the unity project
-            GameObject model = Assets.MainAssetBundle.LoadAsset<GameObject>("mdlExampleSurvivorLX");
+            GameObject model = Assets.MainAssetBundle.LoadAsset<GameObject>("mdlMegamanX");
 
             return model;
         }
@@ -340,6 +345,13 @@ namespace MegamanX
             aimAnimator.pitchGiveupRange = 30f;
             aimAnimator.yawGiveupRange = 10f;
             aimAnimator.giveupDuration = 8f;
+
+            
+
+            //trying to add a passive
+            LoadoutAPI.AddSkill(typeof(Unlimited));
+            EntityStateMachine stateMachine = bodyComponent.GetComponent<EntityStateMachine>();
+            stateMachine.mainStateType = new SerializableEntityStateType(typeof(Unlimited));
         }
 
         private void RegisterCharacter()
@@ -450,6 +462,25 @@ namespace MegamanX
 
 
             //--------------------------------------------------------------------------------------------------------------
+            //---------------------------------------------------------------------------------------------------------------
+
+            // clone Lunar's syringe projectile prefab here to use as our own projectile
+            aBurst = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("prefabs/projectiles/PoisonOrbProjectile"), "Prefabs/Projectiles/RShieldProjectile", true, "C:\\Users\\test\\Documents\\ror2mods\\MegamanX\\MegamanX\\MegamanX\\MegamanX.cs", "RegisterCharacter", 155);
+
+
+            // just setting the numbers to 1 as the entitystate will take care of those
+            aBurst.GetComponent<ProjectileDamage>().damage = 1f;
+            aBurst.GetComponent<ProjectileController>().procCoefficient = 1f;
+            aBurst.GetComponent<ProjectileDamage>().damageType = DamageType.PoisonOnHit;
+
+            // register it for networking
+            if (aBurst) PrefabAPI.RegisterNetworkPrefab(aBurst);
+            //
+
+
+            //--------------------------------------------------------------------------------------------------------------
+
+
             // clone Lunar's syringe projectile prefab here to use as our own projectile
             testProjectile = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("prefabs/projectiles/GravSphere"), "Prefabs/Projectiles/TestExampleArrowProjectile", true, "C:\\Users\\test\\Documents\\ror2mods\\MegamanX\\MegamanX\\MegamanX\\MegamanX.cs", "RegisterCharacter", 155);
 
@@ -475,13 +506,15 @@ namespace MegamanX
                 list.Add(meltCreeperC);
                 list.Add(squeezeBomb);
                 list.Add(shotFMJ);
+                list.Add(aBurst);
             };
 
 
             // write a clean survivor description here!
             string desc = "Megaman X<color=#CCD3E0>" + Environment.NewLine + Environment.NewLine;
             desc = desc + "< ! > X can transform either of his arms into a powerful buster to shoot bullets of compressed solar energy, and has an energy amplifier that allows it to be charged up and release a more powerful shot." + Environment.NewLine + Environment.NewLine;
-            desc = desc + "< ! > X fires a shard of ice that can freeze and/or damage a target." + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > X-Buster is powerful but slow and his charged shot have a limited range, FK-Buster is weaker but faster and have no range limit</color>" + Environment.NewLine + Environment.NewLine;
+            desc = desc + "< ! > X fires a shard of ice that can freeze and damage a target." + Environment.NewLine + Environment.NewLine;
             desc = desc + "< ! > Emergency Acceleration System(DASH) is a move that temporarily speeds up the character." + Environment.NewLine + Environment.NewLine;
             desc = desc + "< ! > X shoots a bamboo-rocket which pursues enemies.</color>" + Environment.NewLine + Environment.NewLine;
 
@@ -541,7 +574,14 @@ namespace MegamanX
             LoadoutAPI.AddSkill(typeof(meltCreeper));
             LoadoutAPI.AddSkill(typeof(FKBuster));
             LoadoutAPI.AddSkill(typeof(squeezeBomb));
+            LoadoutAPI.AddSkill(typeof(FireW));
+            LoadoutAPI.AddSkill(typeof(FireW2));
+            LoadoutAPI.AddSkill(typeof(FireW3));
+            LoadoutAPI.AddSkill(typeof(Unlimited));
+            LoadoutAPI.AddSkill(typeof(AcidBurst));
+            LoadoutAPI.AddSkill(typeof(AcidBurst2));
         }
+
 
         void PassiveSetup()
         {
@@ -549,13 +589,16 @@ namespace MegamanX
             SkillLocator component = characterPrefab.GetComponent<SkillLocator>();
 
             LanguageAPI.Add("X_PASSIVE_NAME", "Limitless Potential");
-            LanguageAPI.Add("X_PASSIVE_DESCRIPTION", "<style=cIsUtility>X's true potential still unachieved, but his adaptation and improvement grow's super fast</style> <style=cIsHealing>AttackPower, Life Regen, armor and shields grows on Level Up increase</style>.");
+            LanguageAPI.Add("X_PASSIVE_DESCRIPTION", "<style=cIsUtility>X's true potential still unachieved, but his adaptation and improvement grow's super fast.</style> <style=cIsHealing>When X HP gets Low, he uses his true powers, getting temporary stronger and generating a shield</style>, <style=cIsDamage> but after this he need to recharge before use this again.</style>");
 
+            
             component.passiveSkill.enabled = true;
             component.passiveSkill.skillNameToken = "X_PASSIVE_NAME";
             component.passiveSkill.skillDescriptionToken = "X_PASSIVE_DESCRIPTION";
             component.passiveSkill.icon = Assets.iconP;
         }
+
+        
 
         void PrimarySetup()
         {
@@ -725,6 +768,45 @@ namespace MegamanX
 
             LoadoutAPI.AddSkillDef(mySkillDef);
 
+            // alternate skill secondary FireWave
+
+            Array.Resize(ref skillFamily.variants, skillFamily.variants.Length + 1);
+            skillFamily.variants[skillFamily.variants.Length - 1] = new SkillFamily.Variant
+            {
+                skillDef = mySkillDef,
+                unlockableName = "",
+                viewableNode = new ViewablesCatalog.Node(mySkillDef.skillNameToken, false, null)
+            };
+
+            LanguageAPI.Add("X_PRIMARY_CROSSBOW2V2_NAME", "Fire Wave");
+            LanguageAPI.Add("X_PRIMARY_CROSSBOW2V2_DESCRIPTION", "X releases a constant stream of flames from his buster");
+
+            // set up your primary skill def here!
+
+            mySkillDef = ScriptableObject.CreateInstance<SkillDef>();
+            mySkillDef.activationState = new SerializableEntityStateType(typeof(FireW));
+            mySkillDef.activationStateMachineName = "Weapon";
+            mySkillDef.baseMaxStock = 1;
+            mySkillDef.baseRechargeInterval = 8f;
+            mySkillDef.beginSkillCooldownOnSkillEnd = false;
+            mySkillDef.canceledFromSprinting = false;
+            mySkillDef.fullRestockOnAssign = true;
+            mySkillDef.interruptPriority = InterruptPriority.Any;
+            mySkillDef.isBullets = false;
+            mySkillDef.isCombatSkill = true;
+            mySkillDef.mustKeyPress = true;
+            mySkillDef.noSprint = true;
+            mySkillDef.rechargeStock = 1;
+            mySkillDef.requiredStock = 1;
+            mySkillDef.shootDelay = 0f;
+            mySkillDef.stockToConsume = 1;
+            mySkillDef.icon = Assets.icon8;
+            mySkillDef.skillDescriptionToken = "X_PRIMARY_CROSSBOW2V2_DESCRIPTION";
+            mySkillDef.skillName = "X_PRIMARY_CROSSBOW2V2_NAME";
+            mySkillDef.skillNameToken = "X_PRIMARY_CROSSBOW2V2_NAME";
+
+            LoadoutAPI.AddSkillDef(mySkillDef);
+
             // add this code after defining a new skilldef if you're adding an alternate skill
 
             Array.Resize(ref skillFamily.variants, skillFamily.variants.Length + 1);
@@ -882,6 +964,47 @@ namespace MegamanX
                 unlockableName = "",
                 viewableNode = new ViewablesCatalog.Node(mySkillDef.skillNameToken, false, null)
             };
+
+            // alternate skill special AcidBurst
+
+            LanguageAPI.Add("X_PRIMARY_CROSSBOW4V2_NAME", "Acid Burst");
+            LanguageAPI.Add("X_PRIMARY_CROSSBOW4V2_DESCRIPTION", " When fired, it creates a glob of acid which, upon contact with any surface, will create acid crystals, dealing <style=cIsDamage>125% base damage</style> and poisoning enemies,  When charged, X will fire two balls of acid dealing a little more damage");
+
+            // set up your primary skill def here!
+
+            mySkillDef = ScriptableObject.CreateInstance<SkillDef>();
+            mySkillDef.activationState = new SerializableEntityStateType(typeof(AcidBurst));
+            mySkillDef.activationStateMachineName = "Weapon";
+            mySkillDef.baseMaxStock = 2;
+            mySkillDef.baseRechargeInterval = 4.8f;
+            mySkillDef.beginSkillCooldownOnSkillEnd = false;
+            mySkillDef.canceledFromSprinting = false;
+            mySkillDef.fullRestockOnAssign = true;
+            mySkillDef.interruptPriority = InterruptPriority.Any;
+            mySkillDef.isBullets = false;
+            mySkillDef.isCombatSkill = true;
+            mySkillDef.mustKeyPress = false;
+            mySkillDef.noSprint = true;
+            mySkillDef.rechargeStock = 1;
+            mySkillDef.requiredStock = 1;
+            mySkillDef.shootDelay = 0.5f;
+            mySkillDef.stockToConsume = 1;
+            mySkillDef.icon = Assets.icon9;
+            mySkillDef.skillDescriptionToken = "X_PRIMARY_CROSSBOW4V2_DESCRIPTION";
+            mySkillDef.skillName = "X_PRIMARY_CROSSBOW4V2_NAME";
+            mySkillDef.skillNameToken = "X_PRIMARY_CROSSBOW4V2_NAME";
+
+            LoadoutAPI.AddSkillDef(mySkillDef);
+
+            // add this code after defining a new skilldef if you're adding an alternate skill
+
+            Array.Resize(ref skillFamily.variants, skillFamily.variants.Length + 1);
+            skillFamily.variants[skillFamily.variants.Length - 1] = new SkillFamily.Variant
+            {
+                skillDef = mySkillDef,
+                unlockableName = "",
+                viewableNode = new ViewablesCatalog.Node(mySkillDef.skillNameToken, false, null)
+            };
         }
 
         private void CreateDoppelganger()
@@ -912,6 +1035,11 @@ namespace MegamanX
 
         public static Texture charPortrait;
 
+        public static GameObject chargeeffect1C;
+        public static GameObject chargeeffect1W;
+        public static GameObject chargeeffect2C;
+        public static GameObject CrystalEffect;
+
         public static Sprite iconP;
         public static Sprite icon1;
         public static Sprite icon2;
@@ -920,6 +1048,8 @@ namespace MegamanX
         public static Sprite icon5;
         public static Sprite icon6;
         public static Sprite icon7;
+        public static Sprite icon8;
+        public static Sprite icon9;
 
         public static void PopulateAssets()
         {
@@ -951,7 +1081,39 @@ namespace MegamanX
             icon5 = MainAssetBundle.LoadAsset<Sprite>("Skill5Icon");
             icon6 = MainAssetBundle.LoadAsset<Sprite>("Skill6Icon");
             icon7 = MainAssetBundle.LoadAsset<Sprite>("Skill7Icon");
+            icon8 = MainAssetBundle.LoadAsset<Sprite>("Skill8Icon");
+            icon9 = MainAssetBundle.LoadAsset<Sprite>("Skill9Icon");
+
+
+            chargeeffect1C = Assets.LoadEffect("ChargeLight1C", "");
+            chargeeffect1W = Assets.LoadEffect("ChargeLight1W", "");
+            chargeeffect2C = Assets.LoadEffect("ChargeLight2C", "");
+            CrystalEffect = Assets.LoadEffect("CristalShine", "");
+
+
         }
+
+
+        private static GameObject LoadEffect(string resourceName, string soundName)
+        {
+            GameObject newEffect = MainAssetBundle.LoadAsset<GameObject>(resourceName);
+
+            newEffect.AddComponent<DestroyOnTimer>().duration = 12;
+            newEffect.AddComponent<NetworkIdentity>();
+            newEffect.AddComponent<VFXAttributes>().vfxPriority = VFXAttributes.VFXPriority.Always;
+            var effect = newEffect.AddComponent<EffectComponent>();
+            effect.applyScale = false;
+            effect.effectIndex = EffectIndex.Invalid;
+            effect.parentToReferencedTransform = true;
+            effect.positionAtReferencedTransform = true;
+            effect.soundName = soundName;
+
+            EffectAPI.AddEffect(newEffect);
+
+            return newEffect;
+        }
+
+
     }
 }
 
@@ -970,6 +1132,10 @@ public static class Sounds
     public static readonly string xHurt = "CallXHurt";
     public static readonly string meltCreeper = "CallMeltCreeper";
     public static readonly string squeezeBomb = "CallSqueezeBomb";
+    public static readonly string FireWave = "CallFireWave";
+    public static readonly string FireWaveSFX = "CallFireWaveSFX";
+    public static readonly string XAttack = "CallXHaa";
+    public static readonly string XPassive = "CallXPassive";
 
 }
 
@@ -978,6 +1144,55 @@ public static class Sounds
 
 
 // the entitystates namespace is used to make the skills, i'm not gonna go into detail here but it's easy to learn through trial and error
+
+namespace EntityStates.ExampleSurvivorStates
+{
+    public class Unlimited : GenericCharacterMain
+    {
+        public float MaxHP;
+        public float GetHP;
+        public double MinHP;
+        public float Timer = 0;
+        public float baseDuration = 1f;
+        private float duration;
+        private Animator animator;
+        public override void OnEnter()
+        {
+            base.OnEnter();
+
+        }
+        public override void OnExit()
+        {
+            base.OnExit();
+        }
+        public override void FixedUpdate()
+        {
+            base.FixedUpdate();
+            Timer -= Time.fixedDeltaTime;
+            MinHP = 0.3 + (base.characterBody.level / 200);
+            if (base.characterBody.healthComponent.combinedHealthFraction < MinHP && Timer < 5f)
+            {
+                Util.PlaySound(Sounds.XPassive, base.gameObject);
+                EffectManager.SimpleMuzzleFlash(MegamanX.Assets.CrystalEffect, base.gameObject, "Crystal", true);
+                base.healthComponent.AddBarrierAuthority(base.characterBody.healthComponent.fullHealth/2f);
+                base.characterBody.AddTimedBuff(BuffIndex.LifeSteal, 5.8f);
+                base.characterBody.AddTimedBuff(BuffIndex.FullCrit, 9.5f);
+                Timer = 100f;
+                
+            }
+
+            return;
+
+        }
+
+        public override InterruptPriority GetMinimumInterruptPriority()
+        {
+            return InterruptPriority.Skill;
+        }
+    }
+}
+
+
 namespace EntityStates.ExampleSurvivorStates
 {
     public class chargeShot : BaseSkillState
@@ -988,7 +1203,7 @@ namespace EntityStates.ExampleSurvivorStates
         public static GameObject tracerEffectPrefab = Resources.Load<GameObject>("prefabs/effects/tracers/TracerBanditShotgun");
         public static GameObject hitEffectPrefab = Resources.Load<GameObject>("prefabs/effects/impacteffects/HitsparkCaptainShotgun");
 
-
+        
 
         public float chargeTime = 0f;
         public float LastChargeTime = 0f;
@@ -1012,8 +1227,9 @@ namespace EntityStates.ExampleSurvivorStates
             this.fireDuration = 0.25f * this.duration;
             base.characterBody.SetAimTimer(2f);
             this.animator = base.GetModelAnimator();
-            this.muzzleString = "Muzzle";
-            base.PlayAnimation("Gesture, Override", "FireArrow", "FireArrow.playbackRate", this.duration);
+            this.muzzleString = "Weapon";
+            base.PlayAnimation("Attack", "ShootPose", "attackSpeed", this.duration);
+           
         }
 
         public override void OnExit()
@@ -1031,6 +1247,7 @@ namespace EntityStates.ExampleSurvivorStates
                 EffectManager.SimpleMuzzleFlash(Commando.CommandoWeapon.FirePistol.effectPrefab, base.gameObject, this.muzzleString, false);
                 if (base.isAuthority)
                 {
+                    base.PlayAnimation("Attack", "ShootBurst", "attackSpeed", this.duration);
                     Util.PlaySound(Sounds.xBullet, base.gameObject);
                     //ProjectileManager.instance.FireProjectile(MegamanX.MegamanXMod.XShot, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageCoefficient * this.damageStat, 0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1f);
                     new BulletAttack
@@ -1062,6 +1279,7 @@ namespace EntityStates.ExampleSurvivorStates
                 EffectManager.SimpleMuzzleFlash(Commando.CommandoWeapon.FirePistol.effectPrefab, base.gameObject, this.muzzleString, false);
                 if (base.isAuthority)
                 {
+                    base.PlayAnimation("Attack", "ShootBurst", "attackSpeed", this.duration);
                     Util.PlaySound(Sounds.xChargeShot, base.gameObject);
                     ProjectileManager.instance.FireProjectile(MegamanX.MegamanXMod.chargeProjectile, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageCoefficient * 4f * this.damageStat, 0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1f);
                 }
@@ -1078,12 +1296,15 @@ namespace EntityStates.ExampleSurvivorStates
                 if (chargeTime > 0.5f && chargeTime <= 1.8f && chargingSFX == false)
                 {
                     Util.PlaySound(Sounds.charging, base.gameObject);
+                    EffectManager.SimpleMuzzleFlash(MegamanX.Assets.chargeeffect1C, base.gameObject, "Center", true);
+                    EffectManager.SimpleMuzzleFlash(MegamanX.Assets.chargeeffect1W, base.gameObject, "Center", true);
                     chargingSFX = true;
                 }
 
                 if (chargeTime >= 1.8f && chargeFullSFX == false)
                 {
                     Util.PlaySound(Sounds.fullCharge, base.gameObject);
+                    EffectManager.SimpleMuzzleFlash(MegamanX.Assets.chargeeffect2C, base.gameObject, "Center", true);
                     chargeFullSFX = true;
                     LastChargeTime = chargeTime;
                 }
@@ -1091,6 +1312,7 @@ namespace EntityStates.ExampleSurvivorStates
                 if ((chargeTime - LastChargeTime) >= 0.68f && chargeFullSFX == true)
                 {
                     Util.PlaySound(Sounds.fullCharge, base.gameObject);
+                    EffectManager.SimpleMuzzleFlash(MegamanX.Assets.chargeeffect2C, base.gameObject, "Center", true);
                     LastChargeTime = chargeTime;
                 }
             }
@@ -1144,116 +1366,148 @@ namespace EntityStates.ExampleSurvivorStates
         public float baseDuration = 0.75f;
         public float recoil = 0.5f;
         public static GameObject tracerEffectPrefab = Resources.Load<GameObject>("Prefabs/Effects/Tracers/TracerToolbotRebar");
+        public static GameObject hitEffectPrefab = Resources.Load<GameObject>("prefabs/effects/impacteffects/BulletImpactSoft");
+
+
+
+        public float chargeTime = 0f;
+        public float LastChargeTime = 0f;
+        public bool chargeFullSFX = false;
+        public bool hasTime = false;
+        public bool hasCharged = false;
+        public bool chargingSFX = false;
+
 
 
         private float duration;
-        // Token: 0x06003E4C RID: 15948 RVA: 0x001043C4 File Offset: 0x001025C4
+        private float fireDuration;
+        private bool hasFired;
+        private Animator animator;
+        private string muzzleString;
+
         public override void OnEnter()
         {
             base.OnEnter();
-            base.characterBody.SetSpreadBloom(0f, false);
-            this.stopwatch = 0f;
             this.duration = this.baseDuration / this.attackSpeedStat;
-            this.delayBeforeFiringProjectile = this.baseDelayBeforeFiringProjectile / this.attackSpeedStat;
-            Util.PlaySound(Sounds.shotgunIce, base.gameObject);
-            //AkSoundEngine.PostEvent(772649499, base.gameObject);
-
-            base.PlayAnimation("Gesture, Override", "ShotgunIceAnim", "FireArrow.playbackRate", this.duration);
+            this.fireDuration = 0.25f * this.duration;
+            base.characterBody.SetAimTimer(2f);
+            this.animator = base.GetModelAnimator();
+            this.muzzleString = "Weapon";
+            base.PlayAnimation("Attack", "ShootPose", "attackSpeed", this.duration);
         }
 
-        // Token: 0x06003E4D RID: 15949 RVA: 0x00032FA7 File Offset: 0x000311A7
         public override void OnExit()
         {
             base.OnExit();
         }
 
-
-        // Token: 0x06003E4F RID: 15951 RVA: 0x00104490 File Offset: 0x00102690
-        protected virtual void Fire()
+        private void FireSGI()
         {
-            string muzzleName = "MuzzleCenter";
-            base.AddRecoil(-2f * this.recoilAmplitude, -3f * this.recoilAmplitude, -1f * this.recoilAmplitude, 1f * this.recoilAmplitude);
-            if (this.effectPrefab)
+            if (!this.hasFired)
             {
-                AkSoundEngine.PostEvent(772649499, base.gameObject);
-                EffectManager.SimpleMuzzleFlash(this.effectPrefab, base.gameObject, muzzleName, false);
-            }
-            this.firedProjectile = true;
-            if (base.isAuthority)
-            {
+                this.hasFired = true;
+                base.characterBody.AddSpreadBloom(0.75f);
                 Ray aimRay = base.GetAimRay();
-                aimRay.direction = Util.ApplySpread(aimRay.direction, this.minSpread, this.maxSpread, 1f, 1f, 0f, this.projectilePitchBonus);
-                ProjectileManager.instance.FireProjectile(MegamanX.MegamanXMod.iceBombProjectile, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageStat * this.damageCoefficient, this.force, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1f);
+                EffectManager.SimpleMuzzleFlash(Commando.CommandoWeapon.FireShotgun.effectPrefab, base.gameObject, this.muzzleString, false);
+
+                if (base.isAuthority)
+                {
+                    base.PlayAnimation("Attack", "ShootBurst", "attackSpeed", this.duration);
+                    Util.PlaySound(Sounds.shotgunIce, base.gameObject);
+                    ProjectileManager.instance.FireProjectile(MegamanX.MegamanXMod.iceBombProjectile, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageCoefficient * this.damageStat, 0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1f);
+
+
+                }
             }
         }
 
-        // Token: 0x06003E50 RID: 15952 RVA: 0x001045A0 File Offset: 0x001027A0
+        private void FireSGIC()
+        {
+            if (!this.hasFired)
+            {
+                this.hasFired = true;
+                base.characterBody.AddSpreadBloom(0.75f);
+                Ray aimRay = base.GetAimRay();
+                EffectManager.SimpleMuzzleFlash(Commando.CommandoWeapon.FirePistol.effectPrefab, base.gameObject, this.muzzleString, false);
+                if (base.isAuthority)
+                {
+                    base.PlayAnimation("Attack", "ShootBurst", "attackSpeed", this.duration);
+                    Util.PlaySound(Sounds.shotgunIce, base.gameObject);
+                    ProjectileManager.instance.FireProjectile(MegamanX.MegamanXMod.iceBombProjectile, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageCoefficient * 3.4f * this.damageStat, 0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1f);
+                }
+            }
+        }
+
+        public override void Update()
+        {
+            base.Update();
+            if (base.inputBank.skill2.down)
+            {
+                chargeTime += Time.deltaTime;
+
+                if (chargeTime > 0.5f && chargeTime <= 1.8f && chargingSFX == false)
+                {
+                    Util.PlaySound(Sounds.charging, base.gameObject);
+                    EffectManager.SimpleMuzzleFlash(MegamanX.Assets.chargeeffect1C, base.gameObject, "Center", true);
+                    EffectManager.SimpleMuzzleFlash(MegamanX.Assets.chargeeffect1W, base.gameObject, "Center", true);
+                    chargingSFX = true;
+                }
+
+                if (chargeTime >= 1.8f && chargeFullSFX == false)
+                {
+                    Util.PlaySound(Sounds.fullCharge, base.gameObject);
+                    EffectManager.SimpleMuzzleFlash(MegamanX.Assets.chargeeffect2C, base.gameObject, "Center", true);
+                    chargeFullSFX = true;
+                    LastChargeTime = chargeTime;
+                }
+
+                if ((chargeTime - LastChargeTime) >= 0.68f && chargeFullSFX == true)
+                {
+                    Util.PlaySound(Sounds.fullCharge, base.gameObject);
+                    EffectManager.SimpleMuzzleFlash(MegamanX.Assets.chargeeffect2C, base.gameObject, "Center", true);
+                    LastChargeTime = chargeTime;
+                }
+            }
+
+            if (!base.inputBank.skill2.down)
+            {
+                if (chargeTime >= 1.8f)
+                    hasCharged = true;
+                chargingSFX = false;
+                hasTime = true;
+            }
+
+        }
+
+
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            this.stopwatch += Time.fixedDeltaTime;
-            if (this.stopwatch >= this.delayBeforeFiringProjectile && !this.firedProjectile)
+
+            if ((base.fixedAge >= this.fireDuration || !base.inputBank || !base.inputBank.skill2.down) && hasCharged == true && hasTime == true)
             {
-                this.Fire();
+                FireSGIC();
             }
-            if (this.stopwatch >= this.duration && base.isAuthority)
+
+            if ((base.fixedAge >= this.fireDuration || !base.inputBank || !base.inputBank.skill2.down) && hasCharged == false && hasTime == true)
             {
+                FireSGI();
+            }
+
+            if (base.fixedAge >= this.duration && base.isAuthority && hasTime == true)
+            {
+                hasTime = false;
+                chargeTime = 0f;
                 this.outer.SetNextStateToMain();
-                return;
             }
         }
 
-        // Token: 0x06003E51 RID: 15953 RVA: 0x0000D472 File Offset: 0x0000B672
         public override InterruptPriority GetMinimumInterruptPriority()
         {
-            return InterruptPriority.PrioritySkill;
+            return InterruptPriority.Skill;
         }
 
-        // Token: 0x04003987 RID: 14727
-        [SerializeField]
-        public GameObject effectPrefab;
-
-        // Token: 0x04003988 RID: 14728
-        [SerializeField]
-        public GameObject projectilePrefab;
-
-
-        // Token: 0x0400398A RID: 14730
-        [SerializeField]
-        public float force;
-
-        // Token: 0x0400398B RID: 14731
-        [SerializeField]
-        public float minSpread;
-
-        // Token: 0x0400398C RID: 14732
-        [SerializeField]
-        public float maxSpread;
-
-
-        // Token: 0x0400398E RID: 14734
-        [SerializeField]
-        public float recoilAmplitude = 1f;
-
-        // Token: 0x04003990 RID: 14736
-        [SerializeField]
-        public float projectilePitchBonus;
-
-        // Token: 0x04003991 RID: 14737
-        [SerializeField]
-        public float baseDelayBeforeFiringProjectile;
-
-        // Token: 0x04003992 RID: 14738
-        private float stopwatch;
-
-        // Token: 0x04003994 RID: 14740
-        private float delayBeforeFiringProjectile;
-
-        // Token: 0x04003995 RID: 14741
-        private bool firedProjectile;
-
     }
-
 }
 
 namespace EntityStates.ExampleSurvivorStates
@@ -1424,10 +1678,10 @@ namespace EntityStates.ExampleSurvivorStates
             this.fireDuration = 0.25f * this.duration;
             base.characterBody.SetAimTimer(2f);
             this.animator = base.GetModelAnimator();
-            this.muzzleString = "Muzzle";
+            this.muzzleString = "Weapon";
 
 
-            base.PlayAnimation("Gesture, Override", "FireArrow", "FireArrow.playbackRate", this.duration);
+            base.PlayAnimation("Attack", "ShootPose", "attackSpeed", this.duration);
         }
 
         public override void OnExit()
@@ -1447,6 +1701,7 @@ namespace EntityStates.ExampleSurvivorStates
 
                 if (base.isAuthority)
                 {
+                    base.PlayAnimation("Attack", "ShootBurst", "attackSpeed", this.duration);
                     Util.PlaySound(Sounds.greenSpinner, base.gameObject);
                     ProjectileManager.instance.FireProjectile(MegamanX.MegamanXMod.greenNProjectile, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageCoefficient * this.damageStat, 0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1f);
                 }
@@ -1509,8 +1764,8 @@ namespace EntityStates.ExampleSurvivorStates
             this.fireDuration = 0.25f * this.duration;
             base.characterBody.SetAimTimer(2f);
             this.animator = base.GetModelAnimator();
-            this.muzzleString = "Muzzle";
-            base.PlayAnimation("Gesture, Override", "FireArrow", "FireArrow.playbackRate", this.duration);
+            this.muzzleString = "Weapon";
+            base.PlayAnimation("Attack", "ShootPose", "attackSpeed", this.duration);
         }
 
         public override void OnExit()
@@ -1528,6 +1783,7 @@ namespace EntityStates.ExampleSurvivorStates
                 EffectManager.SimpleMuzzleFlash(Commando.CommandoWeapon.FirePistol.effectPrefab, base.gameObject, this.muzzleString, false);
                 if (base.isAuthority)
                 {
+                    base.PlayAnimation("Attack", "ShootBurst", "attackSpeed", this.duration);
                     Util.PlaySound(Sounds.meltCreeper, base.gameObject);
                     ProjectileManager.instance.FireProjectile(MegamanX.MegamanXMod.meltCreeper, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageCoefficient * this.damageStat, 0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1f);
                 }
@@ -1544,6 +1800,7 @@ namespace EntityStates.ExampleSurvivorStates
                 EffectManager.SimpleMuzzleFlash(Commando.CommandoWeapon.FirePistol.effectPrefab, base.gameObject, this.muzzleString, false);
                 if (base.isAuthority)
                 {
+                    base.PlayAnimation("Attack", "ShootBurst", "attackSpeed", this.duration);
                     Util.PlaySound(Sounds.meltCreeper, base.gameObject);
                     ProjectileManager.instance.FireProjectile(MegamanX.MegamanXMod.meltCreeperC, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageCoefficient * 1.4f * this.damageStat, 0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1f);
                 }
@@ -1560,12 +1817,15 @@ namespace EntityStates.ExampleSurvivorStates
                 if (chargeTime > 0.5f && chargeTime <= 1.8f && chargingSFX == false)
                 {
                     Util.PlaySound(Sounds.charging, base.gameObject);
+                    EffectManager.SimpleMuzzleFlash(MegamanX.Assets.chargeeffect1C, base.gameObject, "Center", true);
+                    EffectManager.SimpleMuzzleFlash(MegamanX.Assets.chargeeffect1W, base.gameObject, "Center", true);
                     chargingSFX = true;
                 }
 
                 if (chargeTime >= 1.8f && chargeFullSFX == false)
                 {
                     Util.PlaySound(Sounds.fullCharge, base.gameObject);
+                    EffectManager.SimpleMuzzleFlash(MegamanX.Assets.chargeeffect2C, base.gameObject, "Center", true);
                     chargeFullSFX = true;
                     LastChargeTime = chargeTime;
                 }
@@ -1573,6 +1833,7 @@ namespace EntityStates.ExampleSurvivorStates
                 if ((chargeTime - LastChargeTime) >= 0.68f && chargeFullSFX == true)
                 {
                     Util.PlaySound(Sounds.fullCharge, base.gameObject);
+                    EffectManager.SimpleMuzzleFlash(MegamanX.Assets.chargeeffect2C, base.gameObject, "Center", true);
                     LastChargeTime = chargeTime;
                 }
             }
@@ -1716,10 +1977,10 @@ namespace EntityStates.ExampleSurvivorStates
             this.fireDuration = 0.25f * this.duration;
             base.characterBody.SetAimTimer(2f);
             this.animator = base.GetModelAnimator();
-            this.muzzleString = "Muzzle";
+            this.muzzleString = "Weapon";
 
 
-            base.PlayAnimation("Gesture, Override", "FireArrow", "FireArrow.playbackRate", this.duration);
+            base.PlayAnimation("Attack", "ShootPose", "attackSpeed", this.duration);
         }
 
         public override void OnExit()
@@ -1739,6 +2000,7 @@ namespace EntityStates.ExampleSurvivorStates
 
                 if (base.isAuthority)
                 {
+                    base.PlayAnimation("Attack", "ShootBurst", "attackSpeed", this.duration);
                     Util.PlaySound(Sounds.squeezeBomb, base.gameObject);
                     ProjectileManager.instance.FireProjectile(MegamanX.MegamanXMod.squeezeBomb, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageCoefficient * this.damageStat, 0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1f);
                 }
@@ -1773,7 +2035,7 @@ namespace EntityStates.ExampleSurvivorStates
     public class FKBuster : BaseSkillState
     {
         public float damageCoefficient = 1.25f;
-        public float baseDuration = 0.48f;
+        public float baseDuration = 0.44f;
         public float recoil = 0.5f;
         public static GameObject tracerEffectPrefab = Resources.Load<GameObject>("prefabs/effects/tracers/TracerBanditPistol");
         public static GameObject hitEffectPrefab = Resources.Load<GameObject>("prefabs/effects/impacteffects/BulletImpactSoft");
@@ -1802,8 +2064,8 @@ namespace EntityStates.ExampleSurvivorStates
             this.fireDuration = 0.25f * this.duration;
             base.characterBody.SetAimTimer(2f);
             this.animator = base.GetModelAnimator();
-            this.muzzleString = "Muzzle";
-            base.PlayAnimation("Gesture, Override", "FireArrow", "FireArrow.playbackRate", this.duration);
+            this.muzzleString = "Weapon";
+            base.PlayAnimation("Attack", "ShootPose", "attackSpeed", this.duration);
         }
 
         public override void OnExit()
@@ -1816,11 +2078,12 @@ namespace EntityStates.ExampleSurvivorStates
             if (!this.hasFired)
             {
                 this.hasFired = true;
-                base.characterBody.AddSpreadBloom(0.75f);
+                base.characterBody.AddSpreadBloom(0.15f);
                 Ray aimRay = base.GetAimRay();
                 EffectManager.SimpleMuzzleFlash(Commando.CommandoWeapon.FirePistol.effectPrefab, base.gameObject, this.muzzleString, false);
                 if (base.isAuthority)
                 {
+                    base.PlayAnimation("Attack", "ShootBurst", "attackSpeed", this.duration);
                     Util.PlaySound(Sounds.xBullet, base.gameObject);
                     //ProjectileManager.instance.FireProjectile(XSurvivor.MegamanXMod.XShot, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageCoefficient * this.damageStat, 0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1f);
                     new BulletAttack
@@ -1847,14 +2110,14 @@ namespace EntityStates.ExampleSurvivorStates
             if (!this.hasFired)
             {
                 this.hasFired = true;
-                base.characterBody.AddSpreadBloom(0.75f);
+                base.characterBody.AddSpreadBloom(0.45f);
                 Ray aimRay = base.GetAimRay();
                 EffectManager.SimpleMuzzleFlash(Commando.CommandoWeapon.FirePistol.effectPrefab, base.gameObject, this.muzzleString, false);
                 if (base.isAuthority)
                 {
-                    base.PlayAnimation("Gesture, Override", "FireArrow", "FireArrow.playbackRate", this.duration);
+                    base.PlayAnimation("Attack", "ShootBurst", "attackSpeed", this.duration);
                     Util.PlaySound(Sounds.xChargeShot, base.gameObject);
-                    ProjectileManager.instance.FireProjectile(MegamanX.MegamanXMod.shotFMJ, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageCoefficient * 3.8f * this.damageStat, 0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1f);
+                    ProjectileManager.instance.FireProjectile(MegamanX.MegamanXMod.shotFMJ, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageCoefficient * 3f * this.damageStat, 0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1f);
                 }
             }
         }
@@ -1869,12 +2132,15 @@ namespace EntityStates.ExampleSurvivorStates
                 if (chargeTime > 0.5f && chargeTime <= 1.8f && chargingSFX == false)
                 {
                     Util.PlaySound(Sounds.charging, base.gameObject);
+                    EffectManager.SimpleMuzzleFlash(MegamanX.Assets.chargeeffect1C, base.gameObject, "Center", true);
+                    EffectManager.SimpleMuzzleFlash(MegamanX.Assets.chargeeffect1W, base.gameObject, "Center", true);
                     chargingSFX = true;
                 }
 
                 if (chargeTime >= 1.8f && chargeFullSFX == false)
                 {
                     Util.PlaySound(Sounds.fullCharge, base.gameObject);
+                    EffectManager.SimpleMuzzleFlash(MegamanX.Assets.chargeeffect2C, base.gameObject, "Center", true);
                     chargeFullSFX = true;
                     LastChargeTime = chargeTime;
                 }
@@ -1882,6 +2148,7 @@ namespace EntityStates.ExampleSurvivorStates
                 if ((chargeTime - LastChargeTime) >= 0.68f && chargeFullSFX == true)
                 {
                     Util.PlaySound(Sounds.fullCharge, base.gameObject);
+                    EffectManager.SimpleMuzzleFlash(MegamanX.Assets.chargeeffect2C, base.gameObject, "Center", true);
                     LastChargeTime = chargeTime;
                 }
             }
@@ -1915,6 +2182,646 @@ namespace EntityStates.ExampleSurvivorStates
             {
                 hasTime = false;
                 chargeTime = 0f;
+                this.outer.SetNextStateToMain();
+            }
+        }
+
+        public override InterruptPriority GetMinimumInterruptPriority()
+        {
+            return InterruptPriority.Skill;
+        }
+
+    }
+}
+
+
+namespace EntityStates.ExampleSurvivorStates
+{
+    public class FireW : BaseSkillState
+    {
+        public float damageCoefficient = 0.9f;
+        public float baseDuration = 0.001f;
+        public float recoil = 0.5f;
+        //public static GameObject tracerEffectPrefab = Resources.Load<GameObject>("Prefabs/Effects/Tracers/TracerToolbotRebar");
+        public static GameObject tracerEffectPrefab = Resources.Load<GameObject>("prefabs/effects/tracers/TracerEmbers");
+        public static GameObject hitEffectPrefab = Resources.Load<GameObject>("prefabs/effects/impacteffects/Hitspark1");
+
+        public float chargeTime = 0f;
+        public float LastChargeTime = 0f;
+        public bool chargeFullSFX = false;
+        public bool hasTime = false;
+        public bool hasCharged = false;
+        public bool chargingSFX = false;
+        public bool ShootedCharged;
+
+        private float duration;
+        private float fireDuration;
+        private bool hasFired;
+        private Animator animator;
+        private string muzzleString;
+
+        public override void OnEnter()
+        {
+            base.OnEnter();
+            this.duration = this.baseDuration / this.attackSpeedStat;
+            this.fireDuration = 0.25f * this.duration;
+            base.characterBody.SetAimTimer(2f);
+            this.animator = base.GetModelAnimator();
+            this.muzzleString = "Weapon";
+
+
+            base.PlayAnimation("Attack", "ShootPose", "attackSpeed", this.duration);
+        }
+
+        public override void OnExit()
+        {
+            base.OnExit();
+        }
+
+        private void FireFT()
+        {
+            if (!this.hasFired)
+            {
+                this.hasFired = true;
+                ShootedCharged = false;
+                base.characterBody.AddSpreadBloom(0.05f);
+                Ray aimRay = base.GetAimRay();
+                EffectManager.SimpleMuzzleFlash(Commando.CommandoWeapon.FirePistol.effectPrefab, base.gameObject, this.muzzleString, false);
+
+                if (base.isAuthority)
+                {
+                    Util.PlaySound(Sounds.FireWave, base.gameObject);
+                    Util.PlaySound(Sounds.FireWaveSFX, base.gameObject);
+
+                    new BulletAttack
+                    {
+                        owner = base.gameObject,
+                        weapon = base.gameObject,
+                        origin = aimRay.origin,
+                        aimVector = aimRay.direction,
+                        minSpread = 0.1f,
+                        maxSpread = 0.4f,
+                        damage = damageCoefficient * this.damageStat,
+                        force = 20f,
+                        tracerEffectPrefab = FireW.tracerEffectPrefab,
+                        muzzleName = muzzleString,
+                        hitEffectPrefab = FireW.hitEffectPrefab,
+                        maxDistance = 30f,
+                        smartCollision = true,
+                        damageType = DamageType.IgniteOnHit,
+                        isCrit = Util.CheckRoll(this.critStat, base.characterBody.master)
+                    }.Fire();
+                }
+            }
+        }
+
+        private void FireWC()
+        {
+            if (!this.hasFired)
+            {
+                this.hasFired = true;
+                ShootedCharged = true;
+                base.characterBody.AddSpreadBloom(0.05f);
+                Ray aimRay = base.GetAimRay();
+                EffectManager.SimpleMuzzleFlash(Commando.CommandoWeapon.FirePistol.effectPrefab, base.gameObject, this.muzzleString, false);
+
+                if (base.isAuthority)
+                {
+                    Util.PlaySound(Sounds.FireWave, base.gameObject);
+                    Util.PlaySound(Sounds.FireWaveSFX, base.gameObject);
+
+                    new BulletAttack
+                    {
+                        owner = base.gameObject,
+                        weapon = base.gameObject,
+                        origin = aimRay.origin,
+                        aimVector = aimRay.direction,
+                        minSpread = 0.1f,
+                        maxSpread = 0.4f,
+                        damage = damageCoefficient * this.damageStat,
+                        force = 20f,
+                        tracerEffectPrefab = FireW.tracerEffectPrefab,
+                        muzzleName = muzzleString,
+                        hitEffectPrefab = FireW.hitEffectPrefab,
+                        maxDistance = 30f,
+                        smartCollision = true,
+                        damageType = DamageType.IgniteOnHit,
+                        isCrit = Util.CheckRoll(this.critStat, base.characterBody.master)
+                    }.Fire();
+                }
+            }
+        }
+
+        public override void Update()
+        {
+            base.Update();
+            if (base.inputBank.skill2.down)
+            {
+                chargeTime += Time.deltaTime;
+
+                if (chargeTime > 0.5f && chargeTime <= 1.8f && chargingSFX == false)
+                {
+                    Util.PlaySound(Sounds.charging, base.gameObject);
+                    EffectManager.SimpleMuzzleFlash(MegamanX.Assets.chargeeffect1C, base.gameObject, "Center", true);
+                    EffectManager.SimpleMuzzleFlash(MegamanX.Assets.chargeeffect1W, base.gameObject, "Center", true);
+                    chargingSFX = true;
+                }
+
+                if (chargeTime >= 1.8f && chargeFullSFX == false)
+                {
+                    Util.PlaySound(Sounds.fullCharge, base.gameObject);
+                    EffectManager.SimpleMuzzleFlash(MegamanX.Assets.chargeeffect2C, base.gameObject, "Center", true);
+                    chargeFullSFX = true;
+                    LastChargeTime = chargeTime;
+                }
+
+                if ((chargeTime - LastChargeTime) >= 0.68f && chargeFullSFX == true)
+                {
+                    Util.PlaySound(Sounds.fullCharge, base.gameObject);
+                    EffectManager.SimpleMuzzleFlash(MegamanX.Assets.chargeeffect2C, base.gameObject, "Center", true);
+                    LastChargeTime = chargeTime;
+                }
+            }
+
+            if (!base.inputBank.skill2.down)
+            {
+                if (chargeTime >= 1.8f)
+                    hasCharged = true;
+                chargingSFX = false;
+                hasTime = true;
+            }
+
+        }
+
+        public override void FixedUpdate()
+        {
+            base.FixedUpdate();
+
+            if ((base.fixedAge >= this.fireDuration || !base.inputBank || !base.inputBank.skill2.down) && hasCharged == true && hasTime == true)
+            {
+                FireWC();
+            }
+
+            if ((base.fixedAge >= this.fireDuration || !base.inputBank || !base.inputBank.skill2.down) && hasCharged == false && hasTime == true)
+            {
+                FireFT();
+            }
+
+            if (base.fixedAge >= this.duration && base.isAuthority && hasTime == true)
+            {
+                hasTime = false;
+                chargeTime = 0f;
+                FireW2 FW2 = new FireW2();
+                FireW3 FW3 = new FireW3();
+                if (ShootedCharged)
+                    this.outer.SetNextState(FW3);
+                else
+                    this.outer.SetNextState(FW2);
+            }
+
+        }
+
+        public override InterruptPriority GetMinimumInterruptPriority()
+        {
+            return InterruptPriority.Skill;
+        }
+    }
+}
+
+namespace EntityStates.ExampleSurvivorStates
+{
+    public class FireW2 : BaseSkillState
+    {
+        public float damageCoefficient = 1f;
+        public float baseDuration = 0.9f;
+        public float recoil = 0.5f;
+        //public static GameObject tracerEffectPrefab = Resources.Load<GameObject>("Prefabs/Effects/Tracers/TracerToolbotRebar");
+        public static GameObject tracerEffectPrefab = Resources.Load<GameObject>("prefabs/effects/tracers/TracerEmbers");
+        public static GameObject hitEffectPrefab = Resources.Load<GameObject>("prefabs/effects/impacteffects/Hitspark1");
+
+        private int repeat = 0;
+        private float duration;
+        private float fireDuration;
+        private bool hasFired;
+        private Animator animator;
+        private string muzzleString;
+
+        public override void OnEnter()
+        {
+            base.OnEnter();
+            this.duration = this.baseDuration / this.attackSpeedStat;
+            this.fireDuration = 0.25f * this.duration;
+            base.characterBody.SetAimTimer(2f);
+            this.animator = base.GetModelAnimator();
+            this.muzzleString = "Weapon";
+
+
+            base.PlayAnimation("Attack", "ShootPose", "attackSpeed", this.duration);
+        }
+
+        public override void OnExit()
+        {
+            base.OnExit();
+        }
+
+        private void FireW()
+        {
+            if (!this.hasFired)
+            {
+                //this.hasFired = true;
+
+                base.characterBody.AddSpreadBloom(0.15f);
+                Ray aimRay = base.GetAimRay();
+                EffectManager.SimpleMuzzleFlash(Commando.CommandoWeapon.FirePistol.effectPrefab, base.gameObject, this.muzzleString, false);
+
+                if (base.isAuthority)
+                {
+                    if (repeat == 1)
+                        Util.PlaySound(Sounds.FireWaveSFX, base.gameObject);
+
+                    if (repeat % 10 == 0 && repeat > 10)
+                        Util.PlaySound(Sounds.FireWaveSFX, base.gameObject);
+
+                    new BulletAttack
+                    {
+                        owner = base.gameObject,
+                        weapon = base.gameObject,
+                        origin = aimRay.origin,
+                        aimVector = aimRay.direction,
+                        minSpread = 0.1f,
+                        maxSpread = 0.4f,
+                        damage = ((damageCoefficient * this.damageStat) / 100),
+                        force = 20f,
+                        tracerEffectPrefab = FireW2.tracerEffectPrefab,
+                        muzzleName = muzzleString,
+                        hitEffectPrefab = FireW2.hitEffectPrefab,
+                        maxDistance = 35f,
+                        smartCollision = true,
+                        damageType = (Util.CheckRoll(0.48f, base.characterBody.master) ? DamageType.IgniteOnHit : DamageType.Generic)
+                    }.Fire();
+                }
+            }
+        }
+
+        public override void FixedUpdate()
+        {
+            base.FixedUpdate();
+
+            if (base.fixedAge >= this.fireDuration)
+            {
+                FireW();
+            }
+
+            if (base.fixedAge >= this.duration && base.isAuthority)
+            {
+                if (repeat <= 100)
+                {
+                    repeat++;
+                    FireW();
+                }
+                else
+                {
+                    base.PlayAnimation("Attack", "ShootBurst", "attackSpeed", this.duration);
+                    this.outer.SetNextStateToMain();
+                }
+                //FireW2 FTR2 = new FireW2();
+                //this.outer.SetNextState(FTR2);
+            }
+        }
+
+        public override InterruptPriority GetMinimumInterruptPriority()
+        {
+            return InterruptPriority.Skill;
+        }
+    }
+}
+
+namespace EntityStates.ExampleSurvivorStates
+{
+    public class FireW3 : BaseSkillState
+    {
+        public float damageCoefficient = 1f;
+        public float baseDuration = 1.5f;
+        public float recoil = 0.5f;
+        //public static GameObject tracerEffectPrefab = Resources.Load<GameObject>("Prefabs/Effects/Tracers/TracerToolbotRebar");
+        public static GameObject tracerEffectPrefab = Resources.Load<GameObject>("prefabs/effects/tracers/TracerEmbers");
+        public static GameObject hitEffectPrefab = Resources.Load<GameObject>("prefabs/effects/impacteffects/FireMeatBallExplosion");
+
+        private int repeat = 0;
+        private float duration;
+        private float fireDuration;
+        private bool hasFired;
+        private Animator animator;
+        private string muzzleString;
+
+        public override void OnEnter()
+        {
+            base.OnEnter();
+            this.duration = this.baseDuration / this.attackSpeedStat;
+            this.fireDuration = 0.25f * this.duration;
+            base.characterBody.SetAimTimer(2f);
+            this.animator = base.GetModelAnimator();
+            this.muzzleString = "Weapon";
+
+
+            base.PlayAnimation("Attack", "ShootPose", "attackSpeed", this.duration);
+        }
+
+        public override void OnExit()
+        {
+            base.OnExit();
+        }
+
+        private void FireW()
+        {
+            if (!this.hasFired)
+            {
+                //this.hasFired = true;
+
+                base.characterBody.AddSpreadBloom(0.15f);
+                Ray aimRay = base.GetAimRay();
+                EffectManager.SimpleMuzzleFlash(Commando.CommandoWeapon.FirePistol.effectPrefab, base.gameObject, this.muzzleString, false);
+
+                if (base.isAuthority)
+                {
+                    if (repeat == 1)
+                        Util.PlaySound(Sounds.FireWaveSFX, base.gameObject);
+
+                    if (repeat % 10 == 0 && repeat > 10)
+                        Util.PlaySound(Sounds.FireWaveSFX, base.gameObject);
+
+                    new BulletAttack
+                    {
+                        owner = base.gameObject,
+                        weapon = base.gameObject,
+                        origin = aimRay.origin,
+                        aimVector = aimRay.direction,
+                        minSpread = 0.1f,
+                        maxSpread = 0.4f,
+                        damage = ((damageCoefficient * this.damageStat) / 95),
+                        force = 25f,
+                        tracerEffectPrefab = FireW3.tracerEffectPrefab,
+                        muzzleName = muzzleString,
+                        hitEffectPrefab = FireW3.hitEffectPrefab,
+                        maxDistance = 48f,
+                        smartCollision = true,
+                        damageType = (Util.CheckRoll(0.58f, base.characterBody.master) ? DamageType.IgniteOnHit : DamageType.Generic)
+                    }.Fire();
+                }
+            }
+        }
+
+        public override void FixedUpdate()
+        {
+            base.FixedUpdate();
+
+            if (base.fixedAge >= this.fireDuration)
+            {
+                FireW();
+            }
+
+            if (base.fixedAge >= this.duration && base.isAuthority)
+            {
+                if (repeat <= 150)
+                {
+                    repeat++;
+                    FireW();
+                }
+                else
+                {
+                    base.PlayAnimation("Attack", "ShootBurst", "attackSpeed", this.duration);
+                    this.outer.SetNextStateToMain();
+                }
+                //FireW2 FTR2 = new FireW2();
+                //this.outer.SetNextState(FTR2);
+            }
+        }
+
+        public override InterruptPriority GetMinimumInterruptPriority()
+        {
+            return InterruptPriority.Skill;
+        }
+    }
+}
+
+namespace EntityStates.ExampleSurvivorStates
+{
+    public class AcidBurst : BaseSkillState
+    {
+        public float damageCoefficient = 1.25f;
+        public float baseDuration = 2.85f;
+        public float recoil = 0.7f;
+
+
+
+        public float chargeTime = 0f;
+        public float LastChargeTime = 0f;
+        public bool chargeFullSFX = false;
+        public bool hasTime = false;
+        public bool hasCharged = false;
+        public bool chargingSFX = false;
+
+        public bool ShootedCharged;
+
+        private float duration;
+        private float fireDuration;
+        private bool hasFired;
+        private Animator animator;
+        private string muzzleString;
+
+        public override void OnEnter()
+        {
+            base.OnEnter();
+            this.duration = this.baseDuration / this.attackSpeedStat;
+            this.fireDuration = 0.25f * this.duration;
+            base.characterBody.SetAimTimer(2f);
+            this.animator = base.GetModelAnimator();
+            this.muzzleString = "Weapon";
+            base.PlayAnimation("Attack", "ShootPose", "attackSpeed", this.duration);
+
+        }
+
+        public override void OnExit()
+        {
+            base.OnExit();
+        }
+
+        private void FireAB()
+        {
+            if (!this.hasFired)
+            {
+                this.hasFired = true;
+                ShootedCharged = false;
+                base.characterBody.AddSpreadBloom(0.75f);
+                Ray aimRay = base.GetAimRay();
+                EffectManager.SimpleMuzzleFlash(Commando.CommandoWeapon.FireShotgun.effectPrefab, base.gameObject, this.muzzleString, false);
+                if (base.isAuthority)
+                {
+                    base.PlayAnimation("Attack", "ShootBurst", "attackSpeed", this.duration);
+                    Util.PlaySound(Sounds.XAttack, base.gameObject);
+                    ProjectileManager.instance.FireProjectile(MegamanX.MegamanXMod.aBurst, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageCoefficient * this.damageStat, 0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1f);
+                }
+            }
+        }
+
+        private void FireABC()
+        {
+            if (!this.hasFired)
+            {
+                this.hasFired = true;
+                ShootedCharged = true;
+                base.characterBody.AddSpreadBloom(0.75f);
+                Ray aimRay = base.GetAimRay();
+                EffectManager.SimpleMuzzleFlash(Commando.CommandoWeapon.FireShotgun.effectPrefab, base.gameObject, this.muzzleString, false);
+                if (base.isAuthority)
+                {
+
+                    base.PlayAnimation("Attack", "ShootBurst", "attackSpeed", this.duration);
+                    Util.PlaySound(Sounds.XAttack, base.gameObject);
+                    ProjectileManager.instance.FireProjectile(MegamanX.MegamanXMod.aBurst, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageCoefficient * 1.25f * this.damageStat, 0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1f);
+                }
+            }
+        }
+
+        public override void Update()
+        {
+            base.Update();
+            if (base.inputBank.skill4.down)
+            {
+                chargeTime += Time.deltaTime;
+
+                if (chargeTime > 0.5f && chargeTime <= 1.8f && chargingSFX == false)
+                {
+                    Util.PlaySound(Sounds.charging, base.gameObject);
+                    EffectManager.SimpleMuzzleFlash(MegamanX.Assets.chargeeffect1C, base.gameObject, "Center", true);
+                    EffectManager.SimpleMuzzleFlash(MegamanX.Assets.chargeeffect1W, base.gameObject, "Center", true);
+                    chargingSFX = true;
+                }
+
+                if (chargeTime >= 1.8f && chargeFullSFX == false)
+                {
+                    Util.PlaySound(Sounds.fullCharge, base.gameObject);
+                    EffectManager.SimpleMuzzleFlash(MegamanX.Assets.chargeeffect2C, base.gameObject, "Center", true);
+                    chargeFullSFX = true;
+                    LastChargeTime = chargeTime;
+                }
+
+                if ((chargeTime - LastChargeTime) >= 0.68f && chargeFullSFX == true)
+                {
+                    Util.PlaySound(Sounds.fullCharge, base.gameObject);
+                    EffectManager.SimpleMuzzleFlash(MegamanX.Assets.chargeeffect2C, base.gameObject, "Center", true);
+                    LastChargeTime = chargeTime;
+                }
+            }
+
+            if (!base.inputBank.skill4.down)
+            {
+                if (chargeTime >= 1.8f)
+                    hasCharged = true;
+                chargingSFX = false;
+                hasTime = true;
+            }
+
+        }
+
+
+        public override void FixedUpdate()
+        {
+            base.FixedUpdate();
+
+            if ((base.fixedAge >= this.fireDuration || !base.inputBank || !base.inputBank.skill4.down) && hasCharged == true && hasTime == true)
+            {
+                FireABC();
+            }
+
+            if ((base.fixedAge >= this.fireDuration || !base.inputBank || !base.inputBank.skill4.down) && hasCharged == false && hasTime == true)
+            {
+                FireAB();
+            }
+
+            if (base.fixedAge >= this.duration && base.isAuthority && hasTime == true)
+            {
+                hasTime = false;
+                chargeTime = 0f;
+                AcidBurst2 AB2 = new AcidBurst2();
+                if (ShootedCharged)
+                    this.outer.SetNextState(AB2);
+                else
+                    this.outer.SetNextStateToMain();
+
+            }
+        }
+
+        public override InterruptPriority GetMinimumInterruptPriority()
+        {
+            return InterruptPriority.Skill;
+        }
+
+    }
+}
+
+namespace EntityStates.ExampleSurvivorStates
+{
+    public class AcidBurst2 : BaseSkillState
+    {
+        public float damageCoefficient = 1.45f;
+        public float baseDuration = 0.84f;
+        public float recoil = 0.7f;
+
+
+        private float duration;
+        private float fireDuration;
+        private bool hasFired;
+        private Animator animator;
+        private string muzzleString;
+
+        public override void OnEnter()
+        {
+            base.OnEnter();
+            this.duration = this.baseDuration / this.attackSpeedStat;
+            this.fireDuration = 0.25f * this.duration;
+            base.characterBody.SetAimTimer(2f);
+            this.animator = base.GetModelAnimator();
+            this.muzzleString = "Weapon";
+            base.PlayAnimation("Attack", "ShootPose", "attackSpeed", this.duration);
+
+        }
+
+        public override void OnExit()
+        {
+            base.OnExit();
+        }
+
+        private void FireAB()
+        {
+            if (!this.hasFired)
+            {
+                this.hasFired = true;
+                base.characterBody.AddSpreadBloom(0.75f);
+                Ray aimRay = base.GetAimRay();
+                EffectManager.SimpleMuzzleFlash(Commando.CommandoWeapon.FireShotgun.effectPrefab, base.gameObject, this.muzzleString, false);
+                if (base.isAuthority)
+                {
+                    base.PlayAnimation("Attack", "ShootBurst", "attackSpeed", this.duration);
+                    Util.PlaySound(Sounds.xBullet, base.gameObject);
+                    ProjectileManager.instance.FireProjectile(MegamanX.MegamanXMod.aBurst, aimRay.origin, Util.QuaternionSafeLookRotation(aimRay.direction), base.gameObject, this.damageCoefficient * this.damageStat, 0f, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, null, -1f);
+                }
+            }
+        }
+
+
+        public override void FixedUpdate()
+        {
+            base.FixedUpdate();
+
+
+            if (base.fixedAge >= this.fireDuration)
+            {
+                FireAB();
+            }
+
+            if (base.fixedAge >= this.duration && base.isAuthority)
+            {
                 this.outer.SetNextStateToMain();
             }
         }
