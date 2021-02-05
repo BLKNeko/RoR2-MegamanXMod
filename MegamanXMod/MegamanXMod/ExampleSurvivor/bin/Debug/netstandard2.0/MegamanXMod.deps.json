@@ -237,54 +237,6 @@
           }
         }
       },
-      "Unity.Postprocessing.Runtime/0.0.0.0": {
-        "runtime": {
-          "Unity.Postprocessing.Runtime.dll": {
-            "assemblyVersion": "0.0.0.0",
-            "fileVersion": "0.0.0.0"
-          }
-        }
-      },
-      "UnityEngine.UI/1.0.0.0": {
-        "runtime": {
-          "UnityEngine.UI.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
-      },
-      "Rewired_Core/1.0.0.0": {
-        "runtime": {
-          "Rewired_Core.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
-      },
-      "HGCSharpUtils/0.0.0.0": {
-        "runtime": {
-          "HGCSharpUtils.dll": {
-            "assemblyVersion": "0.0.0.0",
-            "fileVersion": "0.0.0.0"
-          }
-        }
-      },
-      "Unity.TextMeshPro/0.0.0.0": {
-        "runtime": {
-          "Unity.TextMeshPro.dll": {
-            "assemblyVersion": "0.0.0.0",
-            "fileVersion": "0.0.0.0"
-          }
-        }
-      },
-      "Facepunch.Steamworks/1.2.0.0": {
-        "runtime": {
-          "Facepunch.Steamworks.dll": {
-            "assemblyVersion": "1.2.0.0",
-            "fileVersion": "1.2.0.0"
-          }
-        }
-      },
       "UnityEngine.TerrainModule/0.0.0.0": {
         "runtime": {
           "UnityEngine.TerrainModule.dll": {
@@ -298,14 +250,6 @@
           "UnityEngine.UIModule.dll": {
             "assemblyVersion": "0.0.0.0",
             "fileVersion": "0.0.0.0"
-          }
-        }
-      },
-      "Zio/0.7.3.0": {
-        "runtime": {
-          "Zio.dll": {
-            "assemblyVersion": "0.7.3.0",
-            "fileVersion": "0.7.3.0"
           }
         }
       },
@@ -333,14 +277,6 @@
           }
         }
       },
-      "Rewired_CSharp/0.0.0.0": {
-        "runtime": {
-          "Rewired_CSharp.dll": {
-            "assemblyVersion": "0.0.0.0",
-            "fileVersion": "0.0.0.0"
-          }
-        }
-      },
       "UnityEngine.TextRenderingModule/0.0.0.0": {
         "runtime": {
           "UnityEngine.TextRenderingModule.dll": {
@@ -352,14 +288,6 @@
       "UnityEngine.IMGUIModule/0.0.0.0": {
         "runtime": {
           "UnityEngine.IMGUIModule.dll": {
-            "assemblyVersion": "0.0.0.0",
-            "fileVersion": "0.0.0.0"
-          }
-        }
-      },
-      "HGUnityUtils/0.0.0.0": {
-        "runtime": {
-          "HGUnityUtils.dll": {
             "assemblyVersion": "0.0.0.0",
             "fileVersion": "0.0.0.0"
           }
@@ -652,14 +580,6 @@
             "fileVersion": "0.0.0.0"
           }
         }
-      },
-      "UnityEngine.Timeline/1.0.0.0": {
-        "runtime": {
-          "UnityEngine.Timeline.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
       }
     }
   },
@@ -803,47 +723,12 @@
       "serviceable": false,
       "sha512": ""
     },
-    "Unity.Postprocessing.Runtime/0.0.0.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "UnityEngine.UI/1.0.0.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "Rewired_Core/1.0.0.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "HGCSharpUtils/0.0.0.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "Unity.TextMeshPro/0.0.0.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "Facepunch.Steamworks/1.2.0.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
-    },
     "UnityEngine.TerrainModule/0.0.0.0": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""
     },
     "UnityEngine.UIModule/0.0.0.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "Zio/0.7.3.0": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""
@@ -863,22 +748,12 @@
       "serviceable": false,
       "sha512": ""
     },
-    "Rewired_CSharp/0.0.0.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
-    },
     "UnityEngine.TextRenderingModule/0.0.0.0": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""
     },
     "UnityEngine.IMGUIModule/0.0.0.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "HGUnityUtils/0.0.0.0": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""
@@ -1059,11 +934,6 @@
       "sha512": ""
     },
     "UnityEngine.PerformanceReportingModule/0.0.0.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "UnityEngine.Timeline/1.0.0.0": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""

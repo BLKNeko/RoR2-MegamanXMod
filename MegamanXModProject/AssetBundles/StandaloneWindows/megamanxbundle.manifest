@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1374985288
+CRC: 2638590212
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a793d3cd3afb63c6df622c4cd6bdb47d
+    Hash: 1ac25261ae03d50c98abb94aa02a7a99
   TypeTreeHash:
     serializedVersion: 2
     Hash: e825b99b9422bc4be566aa3cfa375b98
@@ -62,32 +62,44 @@ Assets:
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/Materials/matX.mat
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/ChargeLight1C.prefab
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/BasicMotions@Run01.fbx
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Materials/matT.mat
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/Materials/matXBuster.mat
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/ChargeLight2C.prefab
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/DeathAnimation.anim
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/ShootBurst.anim
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/Dash.anim
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/mdlMT.prefab
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/CH001_000_G MegamanXModel 1.fbx
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/Skill2Icon.png
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/Run.anim
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/BodyMesh_c.mesh
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/ChargeLight1W.prefab
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/BodyMesh_m.mesh
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/ExampleSurvivorGestureMask.mask
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/mdlMegamanX.prefab
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/buster_009_g.obj
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Textures/tex1_256x256_79083825d25c9431_14.png
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/HandMesh_R_m.mesh
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/10-death_fall_backward.fbx
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/Skill4Icon.png
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/HandMesh_L_c.mesh
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/HandMesh_R_c.mesh
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/ShootPose.anim
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/Skill6Icon.png
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/Skill5Icon.png
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/CH001_000_G MegamanXModel.fbx
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/CristalShine.prefab
-- Assets/ExampleSurvivor/ExampleSurvivorAssets/Textures/ch_001_000.png
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Textures/XTex.png
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/BasicMotions@Jump01.fbx
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/HandMesh_L_m.mesh
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/Looking_Around_02_MB_v01.fbx
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/OLDanimExampleSurvivor.controller
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/FaceMesh_c.mesh
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/ShotgunIce.anim
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/Skill8Icon.png
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/PassiveIcon.png
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/MegamanXTestDash1.fbx
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/Skill9Icon.png
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/Skill1Icon.png
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/Materials/NewMat.mat
 Dependencies: []

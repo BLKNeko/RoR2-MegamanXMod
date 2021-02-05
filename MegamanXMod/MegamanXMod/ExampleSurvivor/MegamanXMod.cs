@@ -22,12 +22,13 @@ using System.Runtime.CompilerServices;
 
 
 
+
 namespace MegamanX
 {
 
     [BepInDependency("com.bepis.r2api")]
 
-    [BepInPlugin(MODUID, "MegamanXMod", "1.6.6")] // put your own name and version here
+    [BepInPlugin(MODUID, "MegamanXMod", "2.1.0")] // put your own name and version here
     [R2APISubmoduleDependency(nameof(PrefabAPI), nameof(SurvivorAPI), nameof(LoadoutAPI), nameof(ItemAPI), nameof(DifficultyAPI), nameof(BuffAPI))] // need these dependencies for the mod to work properly
 
 
@@ -51,6 +52,9 @@ namespace MegamanX
         public static GameObject shotFMJ; //prefab for falcon buster CHARGE shot
         public static GameObject aBurst; //prefab for AcidBurst
 
+        // clone this material to make our own with proper shader/properties
+        public static Material commandoMat;
+
         public static GameObject testProjectile; // testes de projéteis
 
         public SkillLocator skillLocator;
@@ -67,12 +71,163 @@ namespace MegamanX
             RegisterStates(); // register our skill entitystates for networking
             RegisterCharacter(); // and finally put our new survivor in the game
             CreateDoppelganger(); // not really mandatory, but it's simple and not having an umbra is just kinda lame
-            
+            //RegisterSkins();
+            MegamanX.Skins.RegisterSkins();
+
         }
 
-      
+        public static void RegisterSkins()
+        {
+            GameObject bodyPrefab = MegamanXMod.characterPrefab;
 
-        public static GameObject CreateModel(GameObject main)
+            GameObject model = bodyPrefab.GetComponentInChildren<ModelLocator>().modelTransform.gameObject;
+            CharacterModel characterModel = model.GetComponent<CharacterModel>();
+
+            ModelSkinController skinController = model.AddComponent<ModelSkinController>();
+            ChildLocator childLocator = model.GetComponent<ChildLocator>();
+
+            SkinnedMeshRenderer mainRenderer = Reflection.GetFieldValue<SkinnedMeshRenderer>(characterModel, "mainSkinnedMeshRenderer");
+
+
+            //GameObject cloth1 = childLocator.FindChild("Cloth1").gameObject;
+            // GameObject cloth2 = childLocator.FindChild("Cloth2").gameObject;
+            //GameObject cloth3 = childLocator.FindChild("Cloth3").gameObject;
+            // GameObject cloth4 = childLocator.FindChild("Cloth4").gameObject;
+            // GameObject cloth5 = childLocator.FindChild("Cloth5").gameObject;
+
+
+            LanguageAPI.Add("TEST_SKIN_NAME", "Default");
+            LanguageAPI.Add("TEST2_SKIN_NAME", "Test");
+
+
+
+            Material commandoMat = Resources.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody").GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial;
+
+            LoadoutAPI.SkinDefInfo skinDefInfo = default(LoadoutAPI.SkinDefInfo);
+            skinDefInfo.BaseSkins = Array.Empty<SkinDef>();
+            skinDefInfo.MinionSkinReplacements = new SkinDef.MinionSkinReplacement[0];
+            skinDefInfo.ProjectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0];
+
+            /*
+            skinDefInfo.GameObjectActivations = new SkinDef.GameObjectActivation[]
+            {
+                new SkinDef.GameObjectActivation
+                {
+                    gameObject = cloth1,
+                    shouldActivate = true
+                },
+                new SkinDef.GameObjectActivation
+                {
+                    gameObject = cloth2,
+                    shouldActivate = true
+                },
+                new SkinDef.GameObjectActivation
+                {
+                    gameObject = cloth3,
+                    shouldActivate = true
+                },
+                new SkinDef.GameObjectActivation
+                {
+                    gameObject = cloth4,
+                    shouldActivate = true
+                },
+                new SkinDef.GameObjectActivation
+                {
+                    gameObject = cloth5,
+                    shouldActivate = true
+                }
+            };
+
+            */
+
+            skinDefInfo.Icon = Assets.icon1;
+            skinDefInfo.MeshReplacements = new SkinDef.MeshReplacement[]
+            {
+                new SkinDef.MeshReplacement
+                {
+                    renderer = mainRenderer,
+                    mesh = mainRenderer.sharedMesh
+                }
+            };
+            skinDefInfo.Name = "TEST_SKIN_NAME";
+            skinDefInfo.NameToken = "TEST_SKIN_NAME";
+            skinDefInfo.RendererInfos = characterModel.baseRendererInfos;
+            skinDefInfo.RootObject = model;
+            skinDefInfo.UnlockableName = "";
+
+            CharacterModel.RendererInfo[] rendererInfos = skinDefInfo.RendererInfos;
+            CharacterModel.RendererInfo[] array = new CharacterModel.RendererInfo[rendererInfos.Length];
+            rendererInfos.CopyTo(array, 0);
+
+            
+
+            Material material = array[0].defaultMaterial;
+            //body
+            array[0].defaultMaterial = Assets.CreateMaterial("matT", 2.5f, Color.white, 1);
+
+
+            skinDefInfo.RendererInfos = array;
+
+            SkinDef defaultSkin = LoadoutAPI.CreateNewSkinDef(skinDefInfo);
+
+
+
+            LoadoutAPI.SkinDefInfo testSkinDefInfo = default(LoadoutAPI.SkinDefInfo);
+            testSkinDefInfo.BaseSkins = Array.Empty<SkinDef>();
+            testSkinDefInfo.MinionSkinReplacements = new SkinDef.MinionSkinReplacement[0];
+            testSkinDefInfo.ProjectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0];
+
+
+            testSkinDefInfo.Icon = Assets.icon2;
+            //spaceSkinDefInfo.Icon = LoadoutAPI.CreateSkinIcon(new Color(0.83f, 0.83f, 0.83f), new Color(0.64f, 0.64f, 0.64f), new Color(0.25f, 0.25f, 0.25f), new Color(0f, 0f, 0f));
+            testSkinDefInfo.MeshReplacements = new SkinDef.MeshReplacement[]
+            {
+                new SkinDef.MeshReplacement
+                {
+                    renderer = mainRenderer,
+                    mesh = Assets.BodyMesh_c
+                }
+            };
+            testSkinDefInfo.Name = "TEST2_SKIN_NAME";
+            testSkinDefInfo.NameToken = "TEST2_SKIN_NAME";
+            testSkinDefInfo.RendererInfos = characterModel.baseRendererInfos;
+            testSkinDefInfo.RootObject = model;
+            testSkinDefInfo.UnlockableName = "";
+
+            rendererInfos = skinDefInfo.RendererInfos;
+            array = new CharacterModel.RendererInfo[rendererInfos.Length];
+            rendererInfos.CopyTo(array, 0);
+
+            array[0].defaultMaterial = Assets.matTest;
+            //array[0].defaultMaterial = Assets.CreateMaterial("matT", 0f, Color.black, 0f);
+            //array[0].defaultMaterial = Assets.CreateMaterial("matT", 0f, Color.white, 0f);
+            //array[0].defaultMaterial = Assets.CreateMaterial("matT", 0f, Color.white, 0f);
+            //array[0].defaultMaterial = Assets.CreateMaterial("matT", 0f, Color.white, 0f);
+
+            testSkinDefInfo.RendererInfos = array;
+
+            SkinDef testSkin = LoadoutAPI.CreateNewSkinDef(testSkinDefInfo);
+
+
+
+            var skinDefs = new List<SkinDef>();
+
+            skinDefs = new List<SkinDef>()
+                {
+                    defaultSkin,
+                    testSkin
+
+                };
+
+            skinController.skins = skinDefs.ToArray();
+
+        }
+
+
+    
+
+
+    public static GameObject CreateModel(GameObject main)
         {
             Destroy(main.transform.Find("ModelBase").gameObject);
             Destroy(main.transform.Find("CameraPivot").gameObject);
@@ -84,8 +239,10 @@ namespace MegamanX
             return model;
         }
 
-        internal static void CreatePrefab()
+        public static void CreatePrefab()
         {
+
+
             // first clone the commando prefab so we can turn that into our own survivor
             characterPrefab = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody"), "XBody", true, "C:\\Users\\test\\Documents\\ror2mods\\MegamanX\\MegamanX\\MegamanX\\MegamanX.cs", "CreatePrefab", 151);
 
@@ -214,6 +371,8 @@ namespace MegamanX
                 {
                     defaultMaterial = model.GetComponentInChildren<SkinnedMeshRenderer>().material,
                     renderer = model.GetComponentInChildren<SkinnedMeshRenderer>(),
+                   // defaultMaterial = model.GetComponentInChildren<MeshRenderer>().material,
+                   // renderer = model.GetComponentInChildren<MeshRenderer>(),
                     defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
                     ignoreOverlays = false
                 }
@@ -222,6 +381,47 @@ namespace MegamanX
             characterModel.autoPopulateLightInfos = true;
             characterModel.invisibilityCount = 0;
             characterModel.temporaryOverlays = new List<TemporaryOverlay>();
+
+            //---------------------------------------------------------------------------------------
+
+            public static void SetupCharacterModel(GameObject prefab, CustomRendererInfo[] rendererInfo, int mainRendererIndex)
+            {
+                CharacterModel characterModel = prefab.GetComponent<ModelLocator>().modelTransform.gameObject.AddComponent<CharacterModel>();
+                ChildLocator childLocator = characterModel.GetComponent<ChildLocator>();
+
+                characterModel.body = prefab.GetComponent<CharacterBody>();
+
+                List<CharacterModel.RendererInfo> rendererInfos = new List<CharacterModel.RendererInfo>();
+
+                for (int i = 0; i < rendererInfo.Length; i++)
+                {
+                    rendererInfos.Add(new CharacterModel.RendererInfo
+                    {
+                        renderer = childLocator.FindChild(rendererInfo[i].childName).GetComponent<SkinnedMeshRenderer>(),
+                        defaultMaterial = rendererInfo[i].material,
+                        ignoreOverlays = rendererInfo[i].ignoreOverlays,
+                        defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On
+                    });
+                }
+
+                characterModel.baseRendererInfos = rendererInfos.ToArray();
+
+                characterModel.autoPopulateLightInfos = true;
+                characterModel.invisibilityCount = 0;
+                characterModel.temporaryOverlays = new List<TemporaryOverlay>();
+
+                characterModel.mainSkinnedMeshRenderer = characterModel.baseRendererInfos[mainRendererIndex].renderer.GetComponent<SkinnedMeshRenderer>();
+            }
+
+
+
+
+
+
+            //characterModel.SetFieldValue("mainSkinnedMeshRenderer", characterModel.baseRendererInfos[0].renderer.gameObject.GetComponent<SkinnedMeshRenderer>());
+
+            characterModel.mainSkinnedMeshRenderer = characterModel.baseRendererInfos[0].renderer.GetComponent<SkinnedMeshRenderer>();
+            
 
             TeamComponent teamComponent = null;
             if (characterPrefab.GetComponent<TeamComponent>() != null) teamComponent = characterPrefab.GetComponent<TeamComponent>();
@@ -353,6 +553,8 @@ namespace MegamanX
             EntityStateMachine stateMachine = bodyComponent.GetComponent<EntityStateMachine>();
             stateMachine.mainStateType = new SerializableEntityStateType(typeof(Unlimited));
         }
+
+
 
         private void RegisterCharacter()
         {
@@ -1040,6 +1242,10 @@ namespace MegamanX
         public static GameObject chargeeffect2C;
         public static GameObject CrystalEffect;
 
+        public static Material matTest;
+
+        public static Material commandoMat;
+
         public static Sprite iconP;
         public static Sprite icon1;
         public static Sprite icon2;
@@ -1051,8 +1257,15 @@ namespace MegamanX
         public static Sprite icon8;
         public static Sprite icon9;
 
+        public static Mesh BodyMesh_c;
+        public static Mesh BodyMesh_m;
+        public static Mesh FaceMesh_c;
+        public static Mesh Buster_Mesh;
+
         public static void PopulateAssets()
         {
+            commandoMat = Resources.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody").GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial;
+
             if (MainAssetBundle == null)
             {
                 using (var assetStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MegamanXMod.MegamanXBundle"))
@@ -1084,6 +1297,13 @@ namespace MegamanX
             icon8 = MainAssetBundle.LoadAsset<Sprite>("Skill8Icon");
             icon9 = MainAssetBundle.LoadAsset<Sprite>("Skill9Icon");
 
+            matTest = MainAssetBundle.LoadAsset<Material>("matT");
+
+            BodyMesh_c = MainAssetBundle.LoadAsset<Mesh>("BodyMesh_c");
+            BodyMesh_m = MainAssetBundle.LoadAsset<Mesh>("BodyMesh_m");
+            FaceMesh_c = MainAssetBundle.LoadAsset<Mesh>("FaceMesh_c");
+            Buster_Mesh = MainAssetBundle.LoadAsset<Mesh>("Buster_Mesh");
+            
 
             chargeeffect1C = Assets.LoadEffect("ChargeLight1C", "");
             chargeeffect1W = Assets.LoadEffect("ChargeLight1W", "");
@@ -1111,6 +1331,29 @@ namespace MegamanX
             EffectAPI.AddEffect(newEffect);
 
             return newEffect;
+        }
+
+        public static Material CreateMaterial(string materialName, float emission, Color emissionColor, float normalStrength)
+        {
+            if (!commandoMat) commandoMat = Resources.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody").GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial;
+
+            Material tempMat = Assets.MainAssetBundle.LoadAsset<Material>(materialName);
+            if (!tempMat)
+            {
+                return commandoMat;
+            }
+
+            Material mat = UnityEngine.Object.Instantiate<Material>(commandoMat);
+            mat.name = materialName;
+
+            mat.SetColor("_Color", tempMat.GetColor("_Color"));
+            mat.SetTexture("_MainTex", tempMat.GetTexture("_MainTex"));
+            mat.SetColor("_EmColor", emissionColor);
+            mat.SetFloat("_EmPower", emission);
+            mat.SetTexture("_EmTex", tempMat.GetTexture("_EmissionMap"));
+            mat.SetFloat("_NormalStrength", normalStrength);
+
+            return mat;
         }
 
 
@@ -2833,3 +3076,158 @@ namespace EntityStates.ExampleSurvivorStates
 
     }
 }
+
+namespace MegamanX
+{
+    public static class Skins
+    {
+        public static SkinDef CreateSkinDef(string skinName, Sprite skinIcon, CharacterModel.RendererInfo[] rendererInfos, SkinnedMeshRenderer mainRenderer, GameObject root, string unlockName)
+        {
+            LoadoutAPI.SkinDefInfo skinDefInfo = new LoadoutAPI.SkinDefInfo
+            {
+                BaseSkins = Array.Empty<SkinDef>(),
+                GameObjectActivations = new SkinDef.GameObjectActivation[0],
+                Icon = skinIcon,
+                MeshReplacements = new SkinDef.MeshReplacement[0],
+                MinionSkinReplacements = new SkinDef.MinionSkinReplacement[0],
+                Name = skinName,
+                NameToken = skinName,
+                ProjectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0],
+                RendererInfos = rendererInfos,
+                RootObject = root,
+                UnlockableName = unlockName
+            };
+
+            SkinDef skin = LoadoutAPI.CreateNewSkinDef(skinDefInfo);
+
+            return skin;
+        }
+
+        public static SkinDef CreateSkinDef(string skinName, Sprite skinIcon, CharacterModel.RendererInfo[] rendererInfos, SkinnedMeshRenderer mainRenderer, GameObject root, string unlockName, Mesh skinMesh)
+        {
+            LoadoutAPI.SkinDefInfo skinDefInfo = new LoadoutAPI.SkinDefInfo
+            {
+                BaseSkins = Array.Empty<SkinDef>(),
+                GameObjectActivations = new SkinDef.GameObjectActivation[0],
+                Icon = skinIcon,
+                MeshReplacements = new SkinDef.MeshReplacement[]
+                {
+                    new SkinDef.MeshReplacement
+                    {
+                        renderer = mainRenderer,
+                        mesh = skinMesh
+                    }
+                },
+                MinionSkinReplacements = new SkinDef.MinionSkinReplacement[0],
+                Name = skinName,
+                NameToken = skinName,
+                ProjectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0],
+                RendererInfos = rendererInfos,
+                RootObject = root,
+                UnlockableName = unlockName
+            };
+
+            SkinDef skin = LoadoutAPI.CreateNewSkinDef(skinDefInfo);
+
+            return skin;
+        }
+
+        public static Material CreateMaterial(string materialName)
+        {
+            return CreateMaterial(materialName, 0);
+        }
+
+        public static Material CreateMaterial(string materialName, float emission)
+        {
+            return CreateMaterial(materialName, emission, Color.black);
+        }
+
+        public static Material CreateMaterial(string materialName, float emission, Color emissionColor)
+        {
+            return CreateMaterial(materialName, emission, emissionColor, 0);
+        }
+
+        public static Material CreateMaterial(string materialName, float emission, Color emissionColor, float normalStrength)
+        {
+            if (!MegamanXMod.commandoMat) MegamanXMod.commandoMat = Resources.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody").GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial;
+
+            Material mat = UnityEngine.Object.Instantiate<Material>(MegamanXMod.commandoMat);
+            Material tempMat = Assets.MainAssetBundle.LoadAsset<Material>(materialName);
+            if (!tempMat)
+            {
+                return MegamanXMod.commandoMat;
+            }
+
+            mat.name = materialName;
+            mat.SetColor("_Color", tempMat.GetColor("_Color"));
+            mat.SetTexture("_MainTex", tempMat.GetTexture("_MainTex"));
+            mat.SetColor("_EmColor", emissionColor);
+            mat.SetFloat("_EmPower", emission);
+            mat.SetTexture("_EmTex", tempMat.GetTexture("_EmissionMap"));
+            mat.SetFloat("_NormalStrength", normalStrength);
+
+            return mat;
+        }
+
+        public static void RegisterSkins()
+        {
+            GameObject bodyPrefab = MegamanXMod.characterPrefab;
+
+            GameObject model = bodyPrefab.GetComponentInChildren<ModelLocator>().modelTransform.gameObject;
+            CharacterModel characterModel = model.GetComponent<CharacterModel>();
+
+            ModelSkinController skinController = model.AddComponent<ModelSkinController>();
+            ChildLocator childLocator = model.GetComponent<ChildLocator>();
+
+            SkinnedMeshRenderer mainRenderer = characterModel.mainSkinnedMeshRenderer;
+            //SkinnedMeshRenderer mainRenderer = Reflection.GetFieldValue<SkinnedMeshRenderer>(characterModel, "mainSkinnedMeshRenderer");
+
+            List<SkinDef> skinDefs = new List<SkinDef>();
+
+            #region DefaultSkin
+            CharacterModel.RendererInfo[] defaultRenderers = characterModel.baseRendererInfos;
+            SkinDef defaultSkin = CreateSkinDef("X_DEFAULT_SKIN_NAME", Assets.icon1, defaultRenderers, mainRenderer, model, "");
+            defaultSkin.meshReplacements = new SkinDef.MeshReplacement[]
+            {
+                new SkinDef.MeshReplacement
+                {
+                    mesh = mainRenderer.sharedMesh,
+                    renderer = defaultRenderers[0].renderer
+                }//,
+                //new SkinDef.MeshReplacement
+                //{
+                //    mesh = Assets.defaultSwordMesh,
+                //    renderer = defaultRenderers[0].renderer
+                //}
+            };
+
+            skinDefs.Add(defaultSkin);
+            #endregion
+
+            #region MasterySkin
+            CharacterModel.RendererInfo[] masteryRendererInfos = new CharacterModel.RendererInfo[defaultRenderers.Length];
+            defaultRenderers.CopyTo(masteryRendererInfos, 0);
+
+            masteryRendererInfos[0].defaultMaterial = Assets.matTest;
+            //masteryRendererInfos[1].defaultMaterial = CreateMaterial("matT", 5, Color.white);
+
+            SkinDef masterySkin = CreateSkinDef("X_TEST_SKIN_NAME", Assets.icon2, masteryRendererInfos, mainRenderer, model, "");
+            masterySkin.meshReplacements = new SkinDef.MeshReplacement[]
+            {
+                new SkinDef.MeshReplacement
+                {
+                    //mesh = Assets.BodyMesh_m,
+                    mesh = Assets.Buster_Mesh,
+                    renderer = defaultRenderers[0].renderer
+                }
+            };
+
+            skinDefs.Add(masterySkin);
+            #endregion
+
+
+            skinController.skins = skinDefs.ToArray();
+        }
+    }
+}
+
