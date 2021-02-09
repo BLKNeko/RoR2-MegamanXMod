@@ -1,0 +1,265 @@
+fileFormatVersion: 2
+guid: 7f1a43faa60566d4b92da35ff4cec72e
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: Armature
+    100002: Bip
+    100004: Bip Head
+    100006: Bip HeadNub
+    100008: Bip HeadNub_end
+    100010: Bip L Calf
+    100012: Bip L Clavicle
+    100014: Bip L Finger0
+    100016: Bip L Finger01
+    100018: Bip L Finger02
+    100020: Bip L Finger0Nub
+    100022: Bip L Finger0Nub_end
+    100024: Bip L Finger1
+    100026: Bip L Finger11
+    100028: Bip L Finger12
+    100030: Bip L Finger1Nub
+    100032: Bip L Finger1Nub_end
+    100034: Bip L Foot
+    100036: Bip L Forearm
+    100038: Bip L Hand
+    100040: Bip L Thigh
+    100042: Bip L Toe0
+    100044: Bip L Toe0Nub
+    100046: Bip L Toe0Nub_end
+    100048: Bip L UpperArm
+    100050: Bip Neck
+    100052: Bip Pelvis
+    100054: Bip R Calf
+    100056: Bip R Clavicle
+    100058: Bip R Finger0
+    100060: Bip R Finger01
+    100062: Bip R Finger02
+    100064: Bip R Finger0Nub
+    100066: Bip R Finger0Nub_end
+    100068: Bip R Finger1
+    100070: Bip R Finger11
+    100072: Bip R Finger12
+    100074: Bip R Finger1Nub
+    100076: Bip R Finger1Nub_end
+    100078: Bip R Foot
+    100080: Bip R Forearm
+    100082: Bip R Hand
+    100084: Bip R Thigh
+    100086: Bip R Toe0
+    100088: Bip R Toe0Nub
+    100090: Bip R Toe0Nub_end
+    100092: Bip R UpperArm
+    100094: Bip Spine
+    100096: Bip Spine1
+    100098: BodyMesh_c
+    100100: BodyMesh_m
+    100102: CH001_000_G
+    100104: EYE
+    100106: EYE_end
+    100108: FaceMesh_c
+    100110: HandMesh_L_c
+    100112: HandMesh_L_m
+    100114: HandMesh_R_c
+    100116: HandMesh_R_m
+    100118: L
+    100120: L BusterPoint
+    100122: L BusterPoint_end
+    100124: L WeaponPoint
+    100126: L WeaponPoint_end
+    100128: L_end
+    100130: L_Thruster
+    100132: L_Thruster_end
+    100134: //RootNode
+    100136: R
+    100138: R BusterPoint
+    100140: R BusterPoint_end
+    100142: R WeaponPoint
+    100144: R WeaponPoint_end
+    100146: R_end
+    100148: R_Thruster
+    100150: R_Thruster_end
+    100152: ViewPoint
+    100154: ViewPoint_end
+    400000: Armature
+    400002: Bip
+    400004: Bip Head
+    400006: Bip HeadNub
+    400008: Bip HeadNub_end
+    400010: Bip L Calf
+    400012: Bip L Clavicle
+    400014: Bip L Finger0
+    400016: Bip L Finger01
+    400018: Bip L Finger02
+    400020: Bip L Finger0Nub
+    400022: Bip L Finger0Nub_end
+    400024: Bip L Finger1
+    400026: Bip L Finger11
+    400028: Bip L Finger12
+    400030: Bip L Finger1Nub
+    400032: Bip L Finger1Nub_end
+    400034: Bip L Foot
+    400036: Bip L Forearm
+    400038: Bip L Hand
+    400040: Bip L Thigh
+    400042: Bip L Toe0
+    400044: Bip L Toe0Nub
+    400046: Bip L Toe0Nub_end
+    400048: Bip L UpperArm
+    400050: Bip Neck
+    400052: Bip Pelvis
+    400054: Bip R Calf
+    400056: Bip R Clavicle
+    400058: Bip R Finger0
+    400060: Bip R Finger01
+    400062: Bip R Finger02
+    400064: Bip R Finger0Nub
+    400066: Bip R Finger0Nub_end
+    400068: Bip R Finger1
+    400070: Bip R Finger11
+    400072: Bip R Finger12
+    400074: Bip R Finger1Nub
+    400076: Bip R Finger1Nub_end
+    400078: Bip R Foot
+    400080: Bip R Forearm
+    400082: Bip R Hand
+    400084: Bip R Thigh
+    400086: Bip R Toe0
+    400088: Bip R Toe0Nub
+    400090: Bip R Toe0Nub_end
+    400092: Bip R UpperArm
+    400094: Bip Spine
+    400096: Bip Spine1
+    400098: BodyMesh_c
+    400100: BodyMesh_m
+    400102: CH001_000_G
+    400104: EYE
+    400106: EYE_end
+    400108: FaceMesh_c
+    400110: HandMesh_L_c
+    400112: HandMesh_L_m
+    400114: HandMesh_R_c
+    400116: HandMesh_R_m
+    400118: L
+    400120: L BusterPoint
+    400122: L BusterPoint_end
+    400124: L WeaponPoint
+    400126: L WeaponPoint_end
+    400128: L_end
+    400130: L_Thruster
+    400132: L_Thruster_end
+    400134: //RootNode
+    400136: R
+    400138: R BusterPoint
+    400140: R BusterPoint_end
+    400142: R WeaponPoint
+    400144: R WeaponPoint_end
+    400146: R_end
+    400148: R_Thruster
+    400150: R_Thruster_end
+    400152: ViewPoint
+    400154: ViewPoint_end
+    2100000: OrangeCommonMetal
+    2100002: OrangeCommonNon-metal
+    4300000: HandMesh_L_m
+    4300002: BodyMesh_m
+    4300004: HandMesh_L_c
+    4300006: BodyMesh_c
+    4300008: FaceMesh_c
+    4300010: HandMesh_R_c
+    4300012: HandMesh_R_m
+    7400000: Armature|Armature|mixamo.com|Layer0
+    9500000: //RootNode
+    13700000: BodyMesh_c
+    13700002: BodyMesh_m
+    13700004: FaceMesh_c
+    13700006: HandMesh_L_c
+    13700008: HandMesh_L_m
+    13700010: HandMesh_R_c
+    13700012: HandMesh_R_m
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -19,16 +19,14 @@ using AK.Wwise;
 using System.Collections;
 using System.Text;
 using System.Runtime.CompilerServices;
-
-
-
+using BepInEx.Configuration;
 
 namespace MegamanX
 {
 
     [BepInDependency("com.bepis.r2api")]
 
-    [BepInPlugin(MODUID, "MegamanXMod", "2.1.0")] // put your own name and version here
+    [BepInPlugin(MODUID, "MegamanXMod", "2.1.1")] // put your own name and version here
     [R2APISubmoduleDependency(nameof(PrefabAPI), nameof(SurvivorAPI), nameof(LoadoutAPI), nameof(ItemAPI), nameof(DifficultyAPI), nameof(BuffAPI))] // need these dependencies for the mod to work properly
 
 
@@ -61,17 +59,27 @@ namespace MegamanX
 
         private static readonly Color characterColor = new Color(0.0f, 0.24f, 0.48f); // color used for the survivor
 
+        public static ConfigEntry<int> skinConfig { get; set; }
 
 
 
         private void Awake()
         {
+            //------------------------START CONFIG--------------------------
+            skinConfig = Config.Bind<int>(
+            "SKIN_SELECTOR",
+            "SkinIndex",
+            0,
+            "X Default skin = 0 // X Command Mission Skin = 1"
+            );
+
+
+            //------------------------END CONFIG----------------------------
             Assets.PopulateAssets(); // first we load the assets from our assetbundle
             CreatePrefab(); // then we create our character's body prefab
             RegisterStates(); // register our skill entitystates for networking
             RegisterCharacter(); // and finally put our new survivor in the game
             CreateDoppelganger(); // not really mandatory, but it's simple and not having an umbra is just kinda lame
-            //RegisterSkins();
             MegamanX.Skins.RegisterSkins();
 
         }
@@ -223,21 +231,43 @@ namespace MegamanX
 
         }
 
+        public class CustomRendererInfo
+        {
+            public string childName;
+            public Material material;
+            public bool ignoreOverlays;
+        }
 
-    
 
 
-    public static GameObject CreateModel(GameObject main)
+        public static GameObject CreateModel(GameObject main)
         {
             Destroy(main.transform.Find("ModelBase").gameObject);
             Destroy(main.transform.Find("CameraPivot").gameObject);
             Destroy(main.transform.Find("AimOrigin").gameObject);
 
+            int skinIndex = skinConfig.Value;
+
+            GameObject model;
+
+            switch (skinIndex)
+            {
+                case 0:
+                    model = Assets.MainAssetBundle.LoadAsset<GameObject>("mdlMegamanX");
+                    break;
+                case 1:
+                    model = Assets.MainAssetBundle.LoadAsset<GameObject>("mdlMegamanXCM");
+                    break;
+                default:
+                    model = Assets.MainAssetBundle.LoadAsset<GameObject>("mdlMegamanX");
+                    break;
+            }
             // make sure it's set up right in the unity project
-            GameObject model = Assets.MainAssetBundle.LoadAsset<GameObject>("mdlMegamanX");
+            //GameObject model = Assets.MainAssetBundle.LoadAsset<GameObject>("mdlMegamanXT");
 
             return model;
         }
+
 
         public static void CreatePrefab()
         {
@@ -293,9 +323,9 @@ namespace MegamanX
             bodyComponent.rootMotionInMainState = false;
             bodyComponent.mainRootSpeed = 0;
             bodyComponent.baseMaxHealth = 100;
-            bodyComponent.levelMaxHealth = 25.8f;
-            bodyComponent.baseRegen = 0.58f;
-            bodyComponent.levelRegen = 0.4f;
+            bodyComponent.levelMaxHealth = 21f;
+            bodyComponent.baseRegen = 0.34f;
+            bodyComponent.levelRegen = 0.25f;
             bodyComponent.baseMaxShield = 0;
             bodyComponent.levelMaxShield = 0.25f;
             bodyComponent.baseMoveSpeed = 7.5f;
@@ -303,12 +333,12 @@ namespace MegamanX
             bodyComponent.baseAcceleration = 85;
             bodyComponent.baseJumpPower = 15;
             bodyComponent.levelJumpPower = 0.35f;
-            bodyComponent.baseDamage = 20;
-            bodyComponent.levelDamage = 4f;
-            bodyComponent.baseAttackSpeed = 1.4f;
-            bodyComponent.levelAttackSpeed = 0.2f;
+            bodyComponent.baseDamage = 22;
+            bodyComponent.levelDamage = 2.8f;
+            bodyComponent.baseAttackSpeed = 1.2f;
+            bodyComponent.levelAttackSpeed = 0.075f;
             bodyComponent.baseCrit = 1;
-            bodyComponent.levelCrit = 0.35f;
+            bodyComponent.levelCrit = 0.25f;
             bodyComponent.baseArmor = 0.5f;
             bodyComponent.levelArmor = 0.45f;
             bodyComponent.baseJumpCount = 1;
@@ -358,6 +388,9 @@ namespace MegamanX
 
             // childlocator is something that must be set up in the unity project, it's used to find any child objects for things like footsteps or muzzle flashes
             // also important to set up if you want quality
+
+            
+
             ChildLocator childLocator = model.GetComponent<ChildLocator>();
 
             // this component is used to handle all overlays and whatever on your character, without setting this up you won't get any cool effects like burning or freeze on the character
@@ -375,6 +408,24 @@ namespace MegamanX
                    // renderer = model.GetComponentInChildren<MeshRenderer>(),
                     defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
                     ignoreOverlays = false
+                },
+                new CharacterModel.RendererInfo
+                {
+                    defaultMaterial = model.GetComponentInChildren<MeshRenderer>().sharedMaterial,
+                    renderer = model.GetComponentInChildren<MeshRenderer>(),
+                   // defaultMaterial = model.GetComponentInChildren<MeshRenderer>().material,
+                   // renderer = model.GetComponentInChildren<MeshRenderer>(),
+                    defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+                    ignoreOverlays = true
+                },
+                new CharacterModel.RendererInfo
+                {
+                    defaultMaterial = model.GetComponentInChildren<SkinnedMeshRenderer>().material,
+                    renderer = model.GetComponentInChildren<SkinnedMeshRenderer>(),
+                   // defaultMaterial = model.GetComponentInChildren<MeshRenderer>().material,
+                   // renderer = model.GetComponentInChildren<MeshRenderer>(),
+                    defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+                    ignoreOverlays = false
                 }
             };
 
@@ -382,37 +433,8 @@ namespace MegamanX
             characterModel.invisibilityCount = 0;
             characterModel.temporaryOverlays = new List<TemporaryOverlay>();
 
+
             //---------------------------------------------------------------------------------------
-
-            public static void SetupCharacterModel(GameObject prefab, CustomRendererInfo[] rendererInfo, int mainRendererIndex)
-            {
-                CharacterModel characterModel = prefab.GetComponent<ModelLocator>().modelTransform.gameObject.AddComponent<CharacterModel>();
-                ChildLocator childLocator = characterModel.GetComponent<ChildLocator>();
-
-                characterModel.body = prefab.GetComponent<CharacterBody>();
-
-                List<CharacterModel.RendererInfo> rendererInfos = new List<CharacterModel.RendererInfo>();
-
-                for (int i = 0; i < rendererInfo.Length; i++)
-                {
-                    rendererInfos.Add(new CharacterModel.RendererInfo
-                    {
-                        renderer = childLocator.FindChild(rendererInfo[i].childName).GetComponent<SkinnedMeshRenderer>(),
-                        defaultMaterial = rendererInfo[i].material,
-                        ignoreOverlays = rendererInfo[i].ignoreOverlays,
-                        defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On
-                    });
-                }
-
-                characterModel.baseRendererInfos = rendererInfos.ToArray();
-
-                characterModel.autoPopulateLightInfos = true;
-                characterModel.invisibilityCount = 0;
-                characterModel.temporaryOverlays = new List<TemporaryOverlay>();
-
-                characterModel.mainSkinnedMeshRenderer = characterModel.baseRendererInfos[mainRendererIndex].renderer.GetComponent<SkinnedMeshRenderer>();
-            }
-
 
 
 
@@ -552,6 +574,7 @@ namespace MegamanX
             LoadoutAPI.AddSkill(typeof(Unlimited));
             EntityStateMachine stateMachine = bodyComponent.GetComponent<EntityStateMachine>();
             stateMachine.mainStateType = new SerializableEntityStateType(typeof(Unlimited));
+
         }
 
 
@@ -1243,6 +1266,7 @@ namespace MegamanX
         public static GameObject CrystalEffect;
 
         public static Material matTest;
+        public static Material matTest2;
 
         public static Material commandoMat;
 
@@ -1256,6 +1280,8 @@ namespace MegamanX
         public static Sprite icon7;
         public static Sprite icon8;
         public static Sprite icon9;
+
+        public static Sprite SkinIcon1;
 
         public static Mesh BodyMesh_c;
         public static Mesh BodyMesh_m;
@@ -1297,7 +1323,10 @@ namespace MegamanX
             icon8 = MainAssetBundle.LoadAsset<Sprite>("Skill8Icon");
             icon9 = MainAssetBundle.LoadAsset<Sprite>("Skill9Icon");
 
+            SkinIcon1 = MainAssetBundle.LoadAsset<Sprite>("SkinIcon1");
+
             matTest = MainAssetBundle.LoadAsset<Material>("matT");
+            matTest2 = MainAssetBundle.LoadAsset<Material>("NewMat");
 
             BodyMesh_c = MainAssetBundle.LoadAsset<Mesh>("BodyMesh_c");
             BodyMesh_m = MainAssetBundle.LoadAsset<Mesh>("BodyMesh_m");
@@ -1418,8 +1447,11 @@ namespace EntityStates.ExampleSurvivorStates
                 Util.PlaySound(Sounds.XPassive, base.gameObject);
                 EffectManager.SimpleMuzzleFlash(MegamanX.Assets.CrystalEffect, base.gameObject, "Crystal", true);
                 base.healthComponent.AddBarrierAuthority(base.characterBody.healthComponent.fullHealth/2f);
-                base.characterBody.AddTimedBuff(BuffIndex.LifeSteal, 5.8f);
-                base.characterBody.AddTimedBuff(BuffIndex.FullCrit, 9.5f);
+                if (NetworkServer.active)
+                {
+                    base.characterBody.AddTimedBuff(BuffIndex.LifeSteal, 5.8f);
+                    base.characterBody.AddTimedBuff(BuffIndex.FullCrit, 9.5f);
+                }
                 Timer = 100f;
                 
             }
@@ -3186,43 +3218,45 @@ namespace MegamanX
 
             #region DefaultSkin
             CharacterModel.RendererInfo[] defaultRenderers = characterModel.baseRendererInfos;
-            SkinDef defaultSkin = CreateSkinDef("X_DEFAULT_SKIN_NAME", Assets.icon1, defaultRenderers, mainRenderer, model, "");
+            SkinDef defaultSkin = CreateSkinDef("X_DEFAULT_SKIN", Assets.SkinIcon1, defaultRenderers, mainRenderer, model, "");
             defaultSkin.meshReplacements = new SkinDef.MeshReplacement[]
             {
                 new SkinDef.MeshReplacement
                 {
                     mesh = mainRenderer.sharedMesh,
                     renderer = defaultRenderers[0].renderer
-                }//,
-                //new SkinDef.MeshReplacement
-                //{
-                //    mesh = Assets.defaultSwordMesh,
-                //    renderer = defaultRenderers[0].renderer
-                //}
+                }
             };
 
             skinDefs.Add(defaultSkin);
             #endregion
 
-            #region MasterySkin
-            CharacterModel.RendererInfo[] masteryRendererInfos = new CharacterModel.RendererInfo[defaultRenderers.Length];
-            defaultRenderers.CopyTo(masteryRendererInfos, 0);
 
-            masteryRendererInfos[0].defaultMaterial = Assets.matTest;
-            //masteryRendererInfos[1].defaultMaterial = CreateMaterial("matT", 5, Color.white);
 
-            SkinDef masterySkin = CreateSkinDef("X_TEST_SKIN_NAME", Assets.icon2, masteryRendererInfos, mainRenderer, model, "");
-            masterySkin.meshReplacements = new SkinDef.MeshReplacement[]
+            #region MinecraftSkin
+            CharacterModel.RendererInfo[] minecraftRendererInfos = new CharacterModel.RendererInfo[defaultRenderers.Length];
+            defaultRenderers.CopyTo(minecraftRendererInfos, 0);
+
+            minecraftRendererInfos[1].defaultMaterial = Assets.matTest2;
+            minecraftRendererInfos[2].defaultMaterial = Assets.matTest2;
+            // minecraftRendererInfos[1].defaultMaterial = CreateMaterial("matMinecraftPaladin", 3, Color.white);
+
+            SkinDef minecraftSkin = CreateSkinDef("PALADINBODY_MINECRAFT_SKIN_NAME", Assets.icon2, minecraftRendererInfos, mainRenderer, model, "");
+            minecraftSkin.meshReplacements = new SkinDef.MeshReplacement[]
             {
                 new SkinDef.MeshReplacement
                 {
-                    //mesh = Assets.BodyMesh_m,
                     mesh = Assets.Buster_Mesh,
-                    renderer = defaultRenderers[0].renderer
+                    renderer = defaultRenderers[1].renderer
+                },
+                new SkinDef.MeshReplacement
+                {
+                    mesh = mainRenderer.sharedMesh,
+                    renderer = defaultRenderers[2].renderer
                 }
             };
 
-            skinDefs.Add(masterySkin);
+            //skinDefs.Add(minecraftSkin);
             #endregion
 
 

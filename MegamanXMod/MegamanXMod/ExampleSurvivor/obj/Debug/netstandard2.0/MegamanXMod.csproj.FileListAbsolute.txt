@@ -82,3 +82,12 @@ C:\JOGOS\Tools\ROR2 ModdingTools\MegamanXMod\MegamanXMod\MegamanXMod\ExampleSurv
 C:\JOGOS\Tools\ROR2 ModdingTools\MegamanXMod\MegamanXMod\MegamanXMod\ExampleSurvivor\obj\Debug\netstandard2.0\MegamanXMod.dll
 C:\JOGOS\Tools\ROR2 ModdingTools\MegamanXMod\MegamanXMod\MegamanXMod\ExampleSurvivor\obj\Debug\netstandard2.0\MegamanXMod.pdb
 C:\JOGOS\Tools\ROR2 ModdingTools\MegamanXMod\MegamanXMod\MegamanXMod\ExampleSurvivor\obj\Debug\netstandard2.0\MegamanXMod.csprojAssemblyReference.cache
+C:\JOGOS\Tools\ROR2 ModdingTools\MegamanXMod\MegamanXMod\MegamanXMod\ExampleSurvivor\bin\Debug\netstandard2.0\UnityEngine.BaselibModule.dll
+C:\JOGOS\Tools\ROR2 ModdingTools\MegamanXMod\MegamanXMod\MegamanXMod\ExampleSurvivor\bin\Debug\netstandard2.0\UnityEngine.FileSystemHttpModule.dll
+C:\JOGOS\Tools\ROR2 ModdingTools\MegamanXMod\MegamanXMod\MegamanXMod\ExampleSurvivor\bin\Debug\netstandard2.0\UnityEngine.HotReloadModule.dll
+C:\JOGOS\Tools\ROR2 ModdingTools\MegamanXMod\MegamanXMod\MegamanXMod\ExampleSurvivor\bin\Debug\netstandard2.0\UnityEngine.ProfilerModule.dll
+C:\JOGOS\Tools\ROR2 ModdingTools\MegamanXMod\MegamanXMod\MegamanXMod\ExampleSurvivor\bin\Debug\netstandard2.0\UnityEngine.SubstanceModule.dll
+C:\JOGOS\Tools\ROR2 ModdingTools\MegamanXMod\MegamanXMod\MegamanXMod\ExampleSurvivor\bin\Debug\netstandard2.0\UnityEngine.TimelineModule.dll
+C:\JOGOS\Tools\ROR2 ModdingTools\MegamanXMod\MegamanXMod\MegamanXMod\ExampleSurvivor\bin\Debug\netstandard2.0\UnityEngine.TLSModule.dll
+C:\JOGOS\Tools\ROR2 ModdingTools\MegamanXMod\MegamanXMod\MegamanXMod\ExampleSurvivor\bin\Debug\netstandard2.0\UnityEngine.UmbraModule.dll
+C:\JOGOS\Tools\ROR2 ModdingTools\MegamanXMod\MegamanXMod\MegamanXMod\ExampleSurvivor\bin\Debug\netstandard2.0\UnityEngine.UnityTestProtocolModule.dll
