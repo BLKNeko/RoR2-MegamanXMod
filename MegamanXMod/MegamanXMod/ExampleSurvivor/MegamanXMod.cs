@@ -84,152 +84,6 @@ namespace MegamanX
 
         }
 
-        public static void RegisterSkins()
-        {
-            GameObject bodyPrefab = MegamanXMod.characterPrefab;
-
-            GameObject model = bodyPrefab.GetComponentInChildren<ModelLocator>().modelTransform.gameObject;
-            CharacterModel characterModel = model.GetComponent<CharacterModel>();
-
-            ModelSkinController skinController = model.AddComponent<ModelSkinController>();
-            ChildLocator childLocator = model.GetComponent<ChildLocator>();
-
-            SkinnedMeshRenderer mainRenderer = Reflection.GetFieldValue<SkinnedMeshRenderer>(characterModel, "mainSkinnedMeshRenderer");
-
-
-            //GameObject cloth1 = childLocator.FindChild("Cloth1").gameObject;
-            // GameObject cloth2 = childLocator.FindChild("Cloth2").gameObject;
-            //GameObject cloth3 = childLocator.FindChild("Cloth3").gameObject;
-            // GameObject cloth4 = childLocator.FindChild("Cloth4").gameObject;
-            // GameObject cloth5 = childLocator.FindChild("Cloth5").gameObject;
-
-
-            LanguageAPI.Add("TEST_SKIN_NAME", "Default");
-            LanguageAPI.Add("TEST2_SKIN_NAME", "Test");
-
-
-
-            Material commandoMat = Resources.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody").GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial;
-
-            LoadoutAPI.SkinDefInfo skinDefInfo = default(LoadoutAPI.SkinDefInfo);
-            skinDefInfo.BaseSkins = Array.Empty<SkinDef>();
-            skinDefInfo.MinionSkinReplacements = new SkinDef.MinionSkinReplacement[0];
-            skinDefInfo.ProjectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0];
-
-            /*
-            skinDefInfo.GameObjectActivations = new SkinDef.GameObjectActivation[]
-            {
-                new SkinDef.GameObjectActivation
-                {
-                    gameObject = cloth1,
-                    shouldActivate = true
-                },
-                new SkinDef.GameObjectActivation
-                {
-                    gameObject = cloth2,
-                    shouldActivate = true
-                },
-                new SkinDef.GameObjectActivation
-                {
-                    gameObject = cloth3,
-                    shouldActivate = true
-                },
-                new SkinDef.GameObjectActivation
-                {
-                    gameObject = cloth4,
-                    shouldActivate = true
-                },
-                new SkinDef.GameObjectActivation
-                {
-                    gameObject = cloth5,
-                    shouldActivate = true
-                }
-            };
-
-            */
-
-            skinDefInfo.Icon = Assets.icon1;
-            skinDefInfo.MeshReplacements = new SkinDef.MeshReplacement[]
-            {
-                new SkinDef.MeshReplacement
-                {
-                    renderer = mainRenderer,
-                    mesh = mainRenderer.sharedMesh
-                }
-            };
-            skinDefInfo.Name = "TEST_SKIN_NAME";
-            skinDefInfo.NameToken = "TEST_SKIN_NAME";
-            skinDefInfo.RendererInfos = characterModel.baseRendererInfos;
-            skinDefInfo.RootObject = model;
-            skinDefInfo.UnlockableName = "";
-
-            CharacterModel.RendererInfo[] rendererInfos = skinDefInfo.RendererInfos;
-            CharacterModel.RendererInfo[] array = new CharacterModel.RendererInfo[rendererInfos.Length];
-            rendererInfos.CopyTo(array, 0);
-
-            
-
-            Material material = array[0].defaultMaterial;
-            //body
-            array[0].defaultMaterial = Assets.CreateMaterial("matT", 2.5f, Color.white, 1);
-
-
-            skinDefInfo.RendererInfos = array;
-
-            SkinDef defaultSkin = LoadoutAPI.CreateNewSkinDef(skinDefInfo);
-
-
-
-            LoadoutAPI.SkinDefInfo testSkinDefInfo = default(LoadoutAPI.SkinDefInfo);
-            testSkinDefInfo.BaseSkins = Array.Empty<SkinDef>();
-            testSkinDefInfo.MinionSkinReplacements = new SkinDef.MinionSkinReplacement[0];
-            testSkinDefInfo.ProjectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0];
-
-
-            testSkinDefInfo.Icon = Assets.icon2;
-            //spaceSkinDefInfo.Icon = LoadoutAPI.CreateSkinIcon(new Color(0.83f, 0.83f, 0.83f), new Color(0.64f, 0.64f, 0.64f), new Color(0.25f, 0.25f, 0.25f), new Color(0f, 0f, 0f));
-            testSkinDefInfo.MeshReplacements = new SkinDef.MeshReplacement[]
-            {
-                new SkinDef.MeshReplacement
-                {
-                    renderer = mainRenderer,
-                    mesh = Assets.BodyMesh_c
-                }
-            };
-            testSkinDefInfo.Name = "TEST2_SKIN_NAME";
-            testSkinDefInfo.NameToken = "TEST2_SKIN_NAME";
-            testSkinDefInfo.RendererInfos = characterModel.baseRendererInfos;
-            testSkinDefInfo.RootObject = model;
-            testSkinDefInfo.UnlockableName = "";
-
-            rendererInfos = skinDefInfo.RendererInfos;
-            array = new CharacterModel.RendererInfo[rendererInfos.Length];
-            rendererInfos.CopyTo(array, 0);
-
-            array[0].defaultMaterial = Assets.matTest;
-            //array[0].defaultMaterial = Assets.CreateMaterial("matT", 0f, Color.black, 0f);
-            //array[0].defaultMaterial = Assets.CreateMaterial("matT", 0f, Color.white, 0f);
-            //array[0].defaultMaterial = Assets.CreateMaterial("matT", 0f, Color.white, 0f);
-            //array[0].defaultMaterial = Assets.CreateMaterial("matT", 0f, Color.white, 0f);
-
-            testSkinDefInfo.RendererInfos = array;
-
-            SkinDef testSkin = LoadoutAPI.CreateNewSkinDef(testSkinDefInfo);
-
-
-
-            var skinDefs = new List<SkinDef>();
-
-            skinDefs = new List<SkinDef>()
-                {
-                    defaultSkin,
-                    testSkin
-
-                };
-
-            skinController.skins = skinDefs.ToArray();
-
-        }
 
         public class CustomRendererInfo
         {
@@ -1283,9 +1137,7 @@ namespace MegamanX
 
         public static Sprite SkinIcon1;
 
-        public static Mesh BodyMesh_c;
-        public static Mesh BodyMesh_m;
-        public static Mesh FaceMesh_c;
+        public static Mesh BodyMesh;
         public static Mesh Buster_Mesh;
 
         public static void PopulateAssets()
@@ -1328,9 +1180,7 @@ namespace MegamanX
             matTest = MainAssetBundle.LoadAsset<Material>("matT");
             matTest2 = MainAssetBundle.LoadAsset<Material>("NewMat");
 
-            BodyMesh_c = MainAssetBundle.LoadAsset<Mesh>("BodyMesh_c");
-            BodyMesh_m = MainAssetBundle.LoadAsset<Mesh>("BodyMesh_m");
-            FaceMesh_c = MainAssetBundle.LoadAsset<Mesh>("FaceMesh_c");
+            BodyMesh = MainAssetBundle.LoadAsset<Mesh>("BodyMesh");
             Buster_Mesh = MainAssetBundle.LoadAsset<Mesh>("Buster_Mesh");
             
 
@@ -3223,9 +3073,9 @@ namespace MegamanX
             {
                 new SkinDef.MeshReplacement
                 {
-                    mesh = mainRenderer.sharedMesh,
+                    mesh = Assets.BodyMesh,
                     renderer = defaultRenderers[0].renderer
-                }
+                },
             };
 
             skinDefs.Add(defaultSkin);

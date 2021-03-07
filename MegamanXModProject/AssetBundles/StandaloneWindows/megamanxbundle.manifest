@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1621625422
+CRC: 4187565729
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 31ae69077a12778efdb3ac6caa93f897
+    Hash: d25d29c6ad29755411d348101aaf920d
   TypeTreeHash:
     serializedVersion: 2
     Hash: e825b99b9422bc4be566aa3cfa375b98
@@ -36,9 +36,9 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 67079b849227b734694872d8810229b8, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 24f98ceb39626e542bce4568de94b61d, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: aaabc320440a02340b0239f0cf1745a2, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 24f98ceb39626e542bce4568de94b61d, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 136
@@ -83,6 +83,7 @@ Assets:
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/buster_009_g.obj
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/10-death_fall_backward.fbx
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/Skill4Icon.png
+- Assets/ExampleSurvivor/ExampleSurvivorAssets/BodyMesh.mesh
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/Animations/ShootPose.anim
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/Materials/matXCM.mat
 - Assets/ExampleSurvivor/ExampleSurvivorAssets/Skill6Icon.png

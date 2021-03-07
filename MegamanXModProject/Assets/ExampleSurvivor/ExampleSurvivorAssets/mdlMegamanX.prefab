@@ -950,8 +950,8 @@ MonoBehaviour:
     transform: {fileID: 5424989944309085225}
   - name: Crystal
     transform: {fileID: 5237667800718597050}
-  - name: 
-    transform: {fileID: 0}
+  - name: Model
+    transform: {fileID: 9159591316226093676}
   - name: 
     transform: {fileID: 0}
   - name: 

@@ -91,3 +91,4 @@ C:\JOGOS\Tools\ROR2 ModdingTools\MegamanXMod\MegamanXMod\MegamanXMod\ExampleSurv
 C:\JOGOS\Tools\ROR2 ModdingTools\MegamanXMod\MegamanXMod\MegamanXMod\ExampleSurvivor\bin\Debug\netstandard2.0\UnityEngine.TLSModule.dll
 C:\JOGOS\Tools\ROR2 ModdingTools\MegamanXMod\MegamanXMod\MegamanXMod\ExampleSurvivor\bin\Debug\netstandard2.0\UnityEngine.UmbraModule.dll
 C:\JOGOS\Tools\ROR2 ModdingTools\MegamanXMod\MegamanXMod\MegamanXMod\ExampleSurvivor\bin\Debug\netstandard2.0\UnityEngine.UnityTestProtocolModule.dll
+C:\JOGOS\Tools\ROR2 ModdingTools\MegamanXMod\MegamanXMod\MegamanXMod\ExampleSurvivor\bin\Debug\netstandard2.0\HGCSharpUtils.dll
