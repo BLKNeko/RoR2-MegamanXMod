@@ -185,11 +185,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\JOGOS\\Tools\\ROR2 ModdingTools\\MegamanXMod\\MegamanXMod\\MegamanXMod\\ExampleSurvivor\\MegamanXMod.csproj",
+      "projectUniqueName": "C:\\JOGOS\\Tools\\ROR2 ModdingTools\\MegamanXMod\\RoR2-MegamanXMod\\MegamanXMod\\MegamanXMod\\ExampleSurvivor\\MegamanXMod.csproj",
       "projectName": "MegamanXMod",
-      "projectPath": "C:\\JOGOS\\Tools\\ROR2 ModdingTools\\MegamanXMod\\MegamanXMod\\MegamanXMod\\ExampleSurvivor\\MegamanXMod.csproj",
+      "projectPath": "C:\\JOGOS\\Tools\\ROR2 ModdingTools\\MegamanXMod\\RoR2-MegamanXMod\\MegamanXMod\\MegamanXMod\\ExampleSurvivor\\MegamanXMod.csproj",
       "packagesPath": "C:\\Users\\augus\\.nuget\\packages\\",
-      "outputPath": "C:\\JOGOS\\Tools\\ROR2 ModdingTools\\MegamanXMod\\MegamanXMod\\MegamanXMod\\ExampleSurvivor\\obj\\",
+      "outputPath": "C:\\JOGOS\\Tools\\ROR2 ModdingTools\\MegamanXMod\\RoR2-MegamanXMod\\MegamanXMod\\MegamanXMod\\ExampleSurvivor\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "c:\\program files\\dotnet\\sdk\\NuGetFallbackFolder"
