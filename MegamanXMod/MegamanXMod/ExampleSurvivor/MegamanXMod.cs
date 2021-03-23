@@ -3,6 +3,7 @@ using BepInEx.Configuration;
 using EntityStates;
 using EntityStates.ExampleSurvivorStates;
 using KinematicCharacterController;
+using MegamanXMod.Materials;
 using MegamanXMod.SkillStates;
 using R2API;
 using R2API.Utils;
@@ -70,6 +71,9 @@ namespace MegamanX
 
 
             //------------------------END CONFIG----------------------------
+
+            RegisterProjectiles.Register();
+
             Assets.PopulateAssets(); // first we load the assets from our assetbundle
             CreatePrefab(); // then we create our character's body prefab
             RegisterStates(); // register our skill entitystates for networking
@@ -1084,14 +1088,14 @@ namespace MegamanX
             // alternate skill special ChameleonSting
 
             LanguageAPI.Add("X_PRIMARY_CROSSBOW4V3_NAME", "Chameleon Sting");
-            LanguageAPI.Add("X_PRIMARY_CROSSBOW4V3_DESCRIPTION", " When fired, it creates a glob of acid which, upon contact with any surface, will create acid crystals, dealing <style=cIsDamage>125% base damage</style> and poisoning enemies,  When charged, X will fire two balls of acid dealing a little more damage");
+            LanguageAPI.Add("X_PRIMARY_CROSSBOW4V3_DESCRIPTION", " X fires a beam that splits into three, dealing <style=cIsDamage>40% base damage</style>");
 
             // set up your primary skill def here!
 
             mySkillDef = ScriptableObject.CreateInstance<SkillDef>();
             mySkillDef.activationState = new SerializableEntityStateType(typeof(ChameleonSting));
             mySkillDef.activationStateMachineName = "Weapon";
-            mySkillDef.baseMaxStock = 20;
+            mySkillDef.baseMaxStock = 10;
             mySkillDef.baseRechargeInterval = 4.8f;
             mySkillDef.beginSkillCooldownOnSkillEnd = false;
             mySkillDef.canceledFromSprinting = false;

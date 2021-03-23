@@ -7,8 +7,8 @@ namespace MegamanXMod.SkillStates
 {
     public class ChameleonSting : BaseSkillState
     {
-        public float damageCoefficient = 2.5f;
-        public float baseDuration = 0.5f;
+        public float damageCoefficient = 0.4f;
+        public float baseDuration = 0.15f;
         public float recoil = 1f;
         public static GameObject tracerEffectPrefab = Resources.Load<GameObject>("Prefabs/Effects/Tracers/TracerToolbotRebar");
 
@@ -44,7 +44,7 @@ namespace MegamanXMod.SkillStates
             {
                 this.hasFired = true;
 
-                base.characterBody.SetSpreadBloom(0.8f);
+                base.characterBody.SetSpreadBloom(0.4f);
                 Ray aimRay = base.GetAimRay();
                 EffectManager.SimpleMuzzleFlash(EntityStates.Commando.CommandoWeapon.FireShotgun.effectPrefab, base.gameObject, this.muzzleString, false);
                 float spread_value = ((aimRay.direction.x) - (aimRay.direction.x * 3f));
