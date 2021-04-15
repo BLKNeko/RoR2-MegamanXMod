@@ -16,94 +16,103 @@
 
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>..\..\..\..\..\MegamanXVileMod\libs\0Harmony.dll</HintPath>
+      <HintPath>..\..\..\libs\0Harmony.dll</HintPath>
+    </Reference>
+    <Reference Include="AncientScepter">
+      <HintPath>..\..\..\libs\AncientScepter.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\..\..\..\MegamanXVileMod\libs\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\..\..\libs\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx">
-      <HintPath>..\..\..\..\..\MegamanXVileMod\libs\BepInEx.dll</HintPath>
+      <HintPath>..\..\..\libs\BepInEx.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx.Harmony">
-      <HintPath>..\..\..\..\..\MegamanXVileMod\libs\BepInEx.Harmony.dll</HintPath>
+      <HintPath>..\..\..\libs\BepInEx.Harmony.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx.MonoMod.Loader">
-      <HintPath>..\..\..\..\..\MegamanXVileMod\libs\BepInEx.MonoMod.Loader.dll</HintPath>
+      <HintPath>..\..\..\libs\BepInEx.MonoMod.Loader.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx.Preloader">
-      <HintPath>..\..\..\..\..\MegamanXVileMod\libs\BepInEx.Preloader.dll</HintPath>
+      <HintPath>..\..\..\libs\BepInEx.Preloader.dll</HintPath>
     </Reference>
     <Reference Include="Facepunch.Steamworks">
-      <HintPath>..\..\..\..\..\MegamanXVileMod\libs\Facepunch.Steamworks.dll</HintPath>
+      <HintPath>..\..\..\libs\Facepunch.Steamworks.dll</HintPath>
+    </Reference>
+    <Reference Include="HGCSharpUtils">
+      <HintPath>..\..\..\libs\HGCSharpUtils.dll</HintPath>
+    </Reference>
+    <Reference Include="HGUnityUtils">
+      <HintPath>..\..\..\libs\HGUnityUtils.dll</HintPath>
     </Reference>
     <Reference Include="MMHOOK_Assembly-CSharp">
-      <HintPath>..\..\..\..\..\MegamanXVileMod\libs\MMHOOK_Assembly-CSharp.dll</HintPath>
+      <HintPath>..\..\..\libs\MMHOOK_Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil">
-      <HintPath>..\..\..\..\..\MegamanXVileMod\libs\Mono.Cecil.dll</HintPath>
+      <HintPath>..\..\..\libs\Mono.Cecil.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil.Mdb">
-      <HintPath>..\..\..\..\..\MegamanXVileMod\libs\Mono.Cecil.Mdb.dll</HintPath>
+      <HintPath>..\..\..\libs\Mono.Cecil.Mdb.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil.Pdb">
-      <HintPath>..\..\..\..\..\MegamanXVileMod\libs\Mono.Cecil.Pdb.dll</HintPath>
+      <HintPath>..\..\..\libs\Mono.Cecil.Pdb.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil.Rocks">
-      <HintPath>..\..\..\..\..\MegamanXVileMod\libs\Mono.Cecil.Rocks.dll</HintPath>
+      <HintPath>..\..\..\libs\Mono.Cecil.Rocks.dll</HintPath>
     </Reference>
     <Reference Include="MonoMod">
-      <HintPath>..\..\..\..\..\MegamanXVileMod\libs\MonoMod.exe</HintPath>
+      <HintPath>..\..\..\libs\MonoMod.exe</HintPath>
     </Reference>
     <Reference Include="MonoMod.RuntimeDetour">
-      <HintPath>..\..\..\..\..\MegamanXVileMod\libs\MonoMod.RuntimeDetour.dll</HintPath>
+      <HintPath>..\..\..\libs\MonoMod.RuntimeDetour.dll</HintPath>
     </Reference>
     <Reference Include="MonoMod.Utils">
-      <HintPath>..\..\..\..\..\MegamanXVileMod\libs\MonoMod.Utils.dll</HintPath>
+      <HintPath>..\..\..\libs\MonoMod.Utils.dll</HintPath>
     </Reference>
     <Reference Include="R2API">
-      <HintPath>..\..\..\..\..\MegamanXVileMod\libs\R2API.dll</HintPath>
+      <HintPath>..\..\..\libs\R2API.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Postprocessing.Runtime">
-      <HintPath>..\..\..\..\..\MegamanXVileMod\libs\Unity.Postprocessing.Runtime.dll</HintPath>
+      <HintPath>..\..\..\libs\Unity.Postprocessing.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>..\..\..\..\..\MegamanXVileMod\libs\Unity.TextMeshPro.dll</HintPath>
+      <HintPath>..\..\..\libs\Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\..\..\..\..\MegamanXVileMod\libs\UnityEngine.dll</HintPath>
+      <HintPath>..\..\..\libs\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AnimationModule">
-      <HintPath>..\..\..\..\..\MegamanXVileMod\libs\UnityEngine.AnimationModule.dll</HintPath>
+      <HintPath>..\..\..\libs\UnityEngine.AnimationModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AssetBundleModule">
-      <HintPath>..\..\..\..\..\MegamanXVileMod\libs\UnityEngine.AssetBundleModule.dll</HintPath>
+      <HintPath>..\..\..\libs\UnityEngine.AssetBundleModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\..\..\..\..\MegamanXVileMod\libs\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>..\..\..\libs\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.Networking">
-      <HintPath>..\..\..\..\..\MegamanXVileMod\libs\UnityEngine.Networking.dll</HintPath>
+      <HintPath>..\..\..\libs\UnityEngine.Networking.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.ParticleSystemModule">
-      <HintPath>..\..\..\..\..\MegamanXVileMod\libs\UnityEngine.ParticleSystemModule.dll</HintPath>
+      <HintPath>..\..\..\libs\UnityEngine.ParticleSystemModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.PhysicsModule">
-      <HintPath>..\..\..\..\..\MegamanXVileMod\libs\UnityEngine.PhysicsModule.dll</HintPath>
+      <HintPath>..\..\..\libs\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>..\..\..\..\..\MegamanXVileMod\libs\UnityEngine.UI.dll</HintPath>
+      <HintPath>..\..\..\libs\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UIModule">
-      <HintPath>..\..\..\..\..\MegamanXVileMod\libs\UnityEngine.UIModule.dll</HintPath>
+      <HintPath>..\..\..\libs\UnityEngine.UIModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UNETModule">
-      <HintPath>..\..\..\..\..\MegamanXVileMod\libs\UnityEngine.UNETModule.dll</HintPath>
+      <HintPath>..\..\..\libs\UnityEngine.UNETModule.dll</HintPath>
     </Reference>
     <Reference Include="Wwise">
-      <HintPath>bin\Debug\netstandard2.0\Wwise.dll</HintPath>
+      <HintPath>..\..\..\libs\Wwise.dll</HintPath>
     </Reference>
     <Reference Include="Zio">
-      <HintPath>..\..\..\..\..\MegamanXVileMod\libs\Zio.dll</HintPath>
+      <HintPath>..\..\..\libs\Zio.dll</HintPath>
     </Reference>
   </ItemGroup>
 
